@@ -4,6 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.43.0 (2026-11-14)
+
+### Gewijzigd
+- **Secties overlappen elkaar nooit.** Een sectie loslaten over een andere sectie, of binnen 48 punten ervan (slepen aan de titel of een lege plek, een groep slepen, een geminimaliseerde sectie herstellen, een nieuwe sectie maken), laat die andere sectie nu met zijn apparaten opzij schuiven, met dezelfde logica als bij apparaten. Eerder deed alleen het groeien van een sectie dat.
+- **Een song openen ruimt de secties op.** Elke sectie groeit waar nodig zodat zijn apparaten er helemaal in liggen, en secties die elkaar raken of overlappen schuiven uit elkaar, van boven naar beneden en van links naar rechts (met hun apparaten). Het gebeurt zodra de kaarten hun maat hebben, dus ook voor apparaten die hun scherm laat opbouwen.
+
 ## 0.42.0 (2026-11-13)
 
 ### Toegevoegd

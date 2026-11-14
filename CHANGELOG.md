@@ -4,6 +4,12 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.43.0 (2026-11-14)
+
+### Changed
+- **Sections never overlap.** Dropping a section (dragging it by its title or by an empty spot, dragging a group, restoring a minimised section, creating a new one) over another section, or within 48 points of it, now pushes that other section aside with its devices, the same logic as for devices. Before, only growing a section pushed others away.
+- **Opening a song tidies the sections.** Every section grows where needed so that its devices lie completely inside it, and sections that touch or overlap move apart, from top to bottom and left to right (with their devices). It runs once the cards have their size, so also for devices whose screen is built late.
+
 ## 0.42.0 (2026-11-13)
 
 ### Added

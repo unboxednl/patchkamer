@@ -58,7 +58,7 @@ function gdMove(e){ if(!gd||e.pointerId!==gd.id) return; const dx=(e.clientX-gd.
   gd.dev.forEach(m=>PK.pkMoveTo(m.r,m.x+dx,m.y+dy)); gd.sec.forEach(m=>PK.secOffset(m.s,Math.round(m.x+dx)-m.s.x,Math.round(m.y+dy)-m.s.y)); PK.drawCables(); }
 function gdEnd(e){ if(!gd||e.pointerId!==gd.id) return; const g=gd; gd=null;
   if(!g.moved){ if(e.type==='pointerup') PK.select(g.clicked); return; }   // een klik zonder slepen kiest alleen deze kaart
-  if(PK.secDrop) g.dev.forEach(m=>{ const k=m.r.el.dataset.id; if(H.devices.has(k)) PK.secDrop(k); }); if(PK.wslSave) PK.wslSave(); }
+  if(PK.secDrop) g.dev.forEach(m=>{ const k=m.r.el.dataset.id; if(H.devices.has(k)) PK.secDrop(k); }); if(PK.secSpread) PK.secSpread(g.sec.map(m=>m.s).filter(x=>H.secs.includes(x))); if(PK.wslSave) PK.wslSave(); }
 
 function init(){
   document.addEventListener('pointerdown',e=>{

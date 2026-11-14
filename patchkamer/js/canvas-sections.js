@@ -9,6 +9,7 @@
    past); laat je het buiten alle secties los, dan is het geen lid meer. Grepen op alle kanten en hoeken. Slepen van de sectie neemt de leden mee. Minimaliseren laat alleen
    de titelbalk staan en verbergt de leden (en dus hun kabels) tot je herstelt.
    Groeit een sectie (handgreep, of een lid dat er niet meer in past) en komt hij daardoor over een andere sectie heen of binnen GAP daarvan, dan schuift die andere sectie met zijn leden weg; voor die sectie geldt dan weer hetzelfde ten opzichte van de rest (spread). Tijdens het slepen aan een greep wordt steeds vanaf de beginstand gerekend, zodat terug slepen alles weer terugzet.
+   Secties overlappen elkaar nooit: dezelfde logica als bij apparaten (makeRoom): wat je loslaat, maakt of herstelt blijft staan en de andere secties schuiven weg. Bij het openen van een song (`PK.secTidy`) groeit elke sectie zo nodig om zijn leden en schuiven overlappende secties uit elkaar.
    Jump point: {n 1..9, name, x, y, scale}. Alt+n zet het midden van het scherm op dat punt met de bewaarde zoom.
    Beide leven in de brede indeling (coördinaten van r.x en r.y); in de compacte indeling zijn ze verborgen en doen ze niets.
    Opslaan: patchState().sections en .jumps; laden: secLoad(p); clearFloor ruimt op (secClear).
@@ -61,9 +62,9 @@ function build(s){ const e=document.createElement('div'); s.el=e;
   e.addEventListener('pointerdown',ev=>{ if(ev.target!==e) return;
     if(ev.button===0){ begin(ev,e); return; }
     if(ev.button===1||ev.button===2){ ev.stopPropagation(); PK.pan={cx:ev.clientX,cy:ev.clientY,x0:H.view.x,y0:H.view.y}; PK.floorwrap.classList.add('panning'); PK.floorwrap.setPointerCapture(ev.pointerId); } });
-  const mv=ev=>{ if(!d) return; const k=H.view.scale, dx=(ev.clientX-d.cx)/k, dy=(ev.clientY-d.cy)/k; s.x=Math.round(d.x+dx); s.y=Math.round(d.y+dy);
+  const mv=ev=>{ if(!d) return; const k=H.view.scale, dx=(ev.clientX-d.cx)/k, dy=(ev.clientY-d.cy)/k; if(dx||dy) d.moved=true; s.x=Math.round(d.x+dx); s.y=Math.round(d.y+dy);
     d.m.forEach(m=>PK.pkMoveTo(m.r,m.x+dx,m.y+dy)); paint(s); PK.drawCables(); };
-  const end=()=>{ if(d){ d=null; e.classList.remove('drag'); PK.drawCables(); if(PK.wslSave) PK.wslSave(); } };
+  const end=()=>{ if(d){ const moved=d.moved; d=null; e.classList.remove('drag'); if(moved) spread([s]); PK.drawCables(); if(PK.wslSave) PK.wslSave(); } };
   e.addEventListener('pointermove',mv); e.addEventListener('pointerup',end); e.addEventListener('pointercancel',end);
   // grootte, aan elke kant en hoek: nooit kleiner dan nodig is voor de leden
   ['n','s','e','w','ne','nw','se','sw'].forEach(dir=>{ const g=e.querySelector('.secrz.rz-'+dir); let st=null;
@@ -75,7 +76,7 @@ function build(s){ const e=document.createElement('div'); s.el=e;
       s.x=Math.round(x0); s.y=Math.round(y0); s.w=Math.round(Math.min(20000,x1-x0)); s.h=Math.round(Math.min(20000,y1-y0)); paint(s); snapBack(st.sn,s); spread([s]); PK.drawCables(); });
     const done=()=>{ if(st){ st=null; PK.drawCables(); if(PK.wslSave) PK.wslSave(); } }; g.addEventListener('pointerup',done); g.addEventListener('pointercancel',done); });
   layerAdd(e); paint(s); }
-function toggleMin(s){ s.min=!s.min; paint(s); sync(); PK.drawCables(); }
+function toggleMin(s){ s.min=!s.min; paint(s); sync(); if(!s.min) spread([s]); PK.drawCables(); }
 // de sectie groeit (nooit kleiner) tot hij de leden met ruimte omsluit
 function fit(s){ const b=bbox(s); if(!b) return; const x=Math.min(s.x,Math.round(b.x0-PAD)), y=Math.min(s.y,Math.round(b.y0-topPad(s))), r=Math.max(s.x+s.w,Math.round(b.x1+PAD)), bt=Math.max(s.y+s.h,Math.round(b.y1+PAD));
   s.x=x; s.y=y; s.w=r-x; s.h=bt-y; paint(s); }
@@ -84,17 +85,27 @@ function box(s){ const h=hh(s); return s.min?{x0:s.x,y0:s.y,x1:s.x+chipW(s),y1:s
 function shift(s,dx,dy){ s.x+=dx; s.y+=dy; alive(s).forEach(id=>{ const r=H.devices.get(id); PK.pkMoveTo(r,r.x+dx,r.y+dy); }); paint(s); }
 // de gegroeide secties (roots) blijven staan; elke sectie die over een root of binnen GAP ervan komt schuift weg, langs de as waar dat het minste is
 // (weg van het midden van de ander), en schuift dan op zijn beurt de rest weg. De rondes zijn begrensd tegen eindeloos heen en weer.
+function hits(A,B){ return A.x0-GAP<B.x1&&B.x0<A.x1+GAP&&A.y0-GAP<B.y1&&B.y0<A.y1+GAP; }
+// b schuift weg van a (met zijn leden), langs de as waar de middens het verst uit elkaar liggen (naar maat van beide vakken)
+function pushAway(a,b){ const A=box(a), B=box(b);
+  const right=(B.x0+B.x1)/2>=(A.x0+A.x1)/2, down=(B.y0+B.y1)/2>=(A.y0+A.y1)/2,
+    dx=right?A.x1+GAP-B.x0:-(B.x1-(A.x0-GAP)), dy=down?A.y1+GAP-B.y0:-(B.y1-(A.y0-GAP));
+  const nx=Math.abs((B.x0+B.x1)/2-(A.x0+A.x1)/2)/((A.x1-A.x0)+(B.x1-B.x0)), ny=Math.abs((B.y0+B.y1)/2-(A.y0+A.y1)/2)/((A.y1-A.y0)+(B.y1-B.y0));
+  if(nx>=ny) shift(b,Math.round(dx),0); else shift(b,0,Math.round(dy)); }
 function spread(roots){ const fixed=new Set(roots), q=[...roots]; let n=0;
   while(q.length&&n++<400){ const a=q.shift(), A=box(a);
-    H.secs.forEach(b=>{ if(b===a||fixed.has(b)) return; const B=box(b);
-      if(!(A.x0-GAP<B.x1&&B.x0<A.x1+GAP&&A.y0-GAP<B.y1&&B.y0<A.y1+GAP)) return;
-      const right=(B.x0+B.x1)/2>=(A.x0+A.x1)/2, down=(B.y0+B.y1)/2>=(A.y0+A.y1)/2,
-        dx=right?A.x1+GAP-B.x0:-(B.x1-(A.x0-GAP)), dy=down?A.y1+GAP-B.y0:-(B.y1-(A.y0-GAP));
-      // de as waarlangs de buur het meest van A af ligt (afstand tussen de middens, naar maat van beide vakken): daarlangs schuift hij weg
-      const nx=Math.abs((B.x0+B.x1)/2-(A.x0+A.x1)/2)/((A.x1-A.x0)+(B.x1-B.x0)), ny=Math.abs((B.y0+B.y1)/2-(A.y0+A.y1)/2)/((A.y1-A.y0)+(B.y1-B.y0));
-      if(nx>=ny) shift(b,Math.round(dx),0); else shift(b,0,Math.round(dy));
-      q.push(b); }); }
+    H.secs.forEach(b=>{ if(b===a||fixed.has(b)||!hits(A,box(b))) return; pushAway(a,b); q.push(b); }); }
   if(n>1) PK.drawCables(); }
+PK.secSpread=spread;
+// bij het openen van een song: elke sectie omsluit zijn leden (groeit zo nodig), en secties die elkaar raken of overlappen schuiven uit elkaar.
+// Van boven naar beneden en van links naar rechts: een sectie schuift weg van de secties die al op hun plek staan, zodat het altijd eindigt.
+function tidy(){ if(!layer||!wideOn()||!H.secs.length) return; let moved=false;
+  H.secs.forEach(s=>{ if(!s.members.length) return; const a=[s.x,s.y,s.w,s.h].join(); fit(s); if([s.x,s.y,s.w,s.h].join()!==a) moved=true; });
+  const placed=[]; [...H.secs].sort((a,b)=>(a.y-b.y)||(a.x-b.x)).forEach(s=>{
+    for(let k=0;k<60;k++){ const B=box(s), a=placed.find(p=>hits(box(p),B)); if(!a) break; pushAway(a,s); moved=true; }
+    placed.push(s); });
+  if(moved) PK.drawCables(); }
+PK.secTidy=tidy;
 // beginstand van alle secties en hun leden, om tijdens een greep steeds vanaf te rekenen
 function snapAll(){ return H.secs.map(x=>({s:x,x:x.x,y:x.y,m:alive(x).map(id=>{ const r=H.devices.get(id); return {r,x:r.x,y:r.y}; })})); }
 function snapBack(sn,except){ sn.forEach(o=>{ if(o.s===except||!H.secs.includes(o.s)) return; o.s.x=o.x; o.s.y=o.y; o.m.forEach(m=>{ if(m.r.el.isConnected) PK.pkMoveTo(m.r,m.x,m.y); }); paint(o.s); }); }
@@ -177,7 +188,7 @@ async function create(at){ if(!layer||!wideOn()){ return; } if(H.secs.length>=MA
   const s={id:'s'+(uid++),name:PK.pkt('m.sc_standaardnaam')+' '+(H.secs.length+1),color:'#4fd1c5',alpha:0.16,line:'solid',fs:32,n:0,x:Math.round(at.x),y:Math.round(at.y),w:560,h:380,min:false,members:[]};
   const o=await form(PK.pkt('m.sc_titel_nieuw'),secFields(s),PK.pkt('m.sc_ok_maken')); if(!o) return; secApply(s,o); H.secs.push(s); build(s);
   // wat er al op ligt, hoort er nu bij
-  H.devices.forEach((r,id)=>{ const c=centre(id); if(c&&under(c.x,c.y,rectOf(r))===s){ H.secs.forEach(x=>{ x.members=x.members.filter(m=>m!==id); }); s.members.push(id); } }); fit(s); sync(); PK.drawCables(); if(PK.wslSave) PK.wslSave(); }
+  H.devices.forEach((r,id)=>{ const c=centre(id); if(c&&under(c.x,c.y,rectOf(r))===s){ H.secs.forEach(x=>{ x.members=x.members.filter(m=>m!==id); }); s.members.push(id); } }); fit(s); spread([s]); sync(); PK.drawCables(); if(PK.wslSave) PK.wslSave(); }
 async function edit(s){ const o=await form(PK.pkt('m.sc_titel_edit'),secFields(s),PK.pkt('m.sc_ok_opslaan')); if(!o) return; secApply(s,o); paint(s); if(PK.wslSave) PK.wslSave(); }
 function remove(s){ H.secsel.delete(s); alive(s).forEach(id=>H.devices.get(id).el.classList.remove('secmin')); H.secs=H.secs.filter(x=>x!==s); if(s.el) s.el.remove(); PK.drawCables(); if(PK.wslSave) PK.wslSave(); }
 function menu(s,x,y){ pop(x,y,[[PK.pkt('m.sc_bewerken'),()=>edit(s)],[PK.pkt(s.min?'m.sc_herstel':'m.sc_minimaliseer'),()=>toggleMin(s)],[PK.pkt('m.sc_kopieer'),()=>{ selectSec(s); if(PK.groupCopy) PK.groupCopy(PK.selection()); }],[PK.pkt('m.sc_verwijder'),()=>remove(s)]]); }
