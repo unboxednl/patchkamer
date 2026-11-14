@@ -286,6 +286,8 @@ A **skin** only changes the **looks** of one device, never its sound, settings o
 
 **Default skin for new devices.** Under **Settings** choose **Default skin for new devices**: **Standard** or **Compact (small screens)**. A device you place afterwards gets the skin called Compact if it has one; otherwise it stays Standard. Devices already placed and songs do not change, and on the card you can always choose under **Skin**. The choice is a preference of this browser.
 
+**Files from the internet when a song opens.** Under **Settings** there is **Load files from the internet automatically when a song opens** (on by default). If a device on the floor needs files, such as a drum kit (Acoustic Drums), saxophone recordings (Sax Studio) or samples (Pad Sampler), it fetches them itself as soon as you open a song or workspace, from the same stated source as its Load button. Off: you click Load yourself. A preset or tune in a song is then also selected in its list, as soon as the library with that name is loaded (see **Settings → Load automatically**).
+
 **Saving.** The choice per device is stored in the workspace and in the song, together with the skins used (at most 20), so a song keeps its looks without the library. When you open one, those skins quietly enter your register (a newer version wins). Workspaces and songs without skins load as always. Skins never touch the sound: the device's settings are the same with and without a skin.
 
 **Design choices (skins contract 0.8).** Besides CSS, a skin can contain **design choices** that work on every device, set as the skin's default and overridable per appearance:

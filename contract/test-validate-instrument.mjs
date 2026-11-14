@@ -62,6 +62,15 @@ errs('latency verandert de state', withLat('latency() { this.n = (this.n || 0) +
 const withPeerState = body => dev(`el.appendChild(document.createElement('div'));`).replace('getState() { return { v: 1 }; },', `getState() { return { v: 1 }; }, onPeers() { ${body} },`);
 ok('stateOf en setStateOf bestaan op de nep-host (v1.35)', withPeerState("if (typeof host.stateOf === 'function') { const s = host.stateOf(this, 'x'); if (s === null && host.setStateOf(this, 'x', {}) === false) this.n = 1; }"));
 
+// ---- bestanden herstellen (v1.36)
+const withRestore = m => dev(`el.appendChild(document.createElement('div'));`).replace('getState() { return { v: 1 }; },', `getState() { return { v: 1 }; }, ${m},`);
+ok('restoreFiles zonder netwerk, geeft niets (v1.36)', withRestore('restoreFiles() { this.n = 1; }'));
+ok('restoreFiles geeft een belofte die weigert (v1.36)', withRestore("restoreFiles() { return Promise.reject(new Error('network')); }"));
+ok('restoreFiles mag host.fetchFile aanroepen (v1.36)', withRestore("async restoreFiles() { try { await host.fetchFile(this, 'https://example.com/a.bin'); } catch (e) {} }"));
+errs('restoreFiles is geen functie', withRestore('restoreFiles: 5'), [['restoreFiles (v1.36) moet een functie zijn', 'restoreFiles (v1.36) must be a function']]);
+errs('restoreFiles gooit synchroon', withRestore("restoreFiles() { throw new Error('stuk'); }"), [['restoreFiles() gooit', 'restoreFiles() throws']]);
+errs('restoreFiles geeft een getal', withRestore('restoreFiles() { return 5; }'), [['restoreFiles() moet een belofte', 'restoreFiles() must return a promise']]);
+
 // ---- zonder waarschuwing
 ok('geen host.ui, geen id', dev(`el.appendChild(document.createElement('div'));`));
 ok('knop zonder opties (oud gedrag)', dev(`ui.k.push(host.ui.knob(el, T.a, [0, 1, 0.01], 0.5, v => v, v => {}));`));

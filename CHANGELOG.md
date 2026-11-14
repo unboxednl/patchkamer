@@ -4,6 +4,14 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.45.0 (2026-11-14)
+
+### Added
+- **Kits and recordings load by themselves when a song opens** (contract v1.36): a device may have a method `restoreFiles()` that the host calls, one device at a time, after a song or workspace has been opened and the state is applied. Acoustic Drums (1.1.0) and Sax Studio (1.2.0) use it to fetch the kit or the recordings that their saved state points to, exactly as their Load button would (same source, progress and error messages). New state field `kit` (false until a kit has been loaded; songs saved before this keep their button until saved again). The three funk songs have `kit` set. New setting **Load files from the internet automatically when a song opens** (on by default); off means you click Load yourself. `create`, `mount` and `setState` still never fetch anything. Validator, contract (NL and EN) and tests have the new method.
+
+### Fixed
+- **"(library not loaded)" next to a preset or tune after opening a song.** A song stores the id of the library on the computer where it was made, which does not exist elsewhere. The host now picks the preset or tune with the same name from a loaded library of that device (also when the library finishes loading later), so presets of Master Chain and other devices show as chosen. The values themselves were always in the device state.
+
 ## 0.44.0 (2026-11-14)
 
 ### Changed

@@ -14,6 +14,7 @@ function loadPatch(p){ clearFloor(); PK.Host.bpm=p.bpm||126; PK.$('bpm').value=P
   PK.Host.views=PK.viewsClean(p.views);
   const missing=[], fallback=[]; p.devices.forEach(d=>{ let ver=d.version; if(ver&&!PK.Host.registry.has(PK.Host.key(d.def,ver))){ const l=PK.Host.latest(d.def); if(l){fallback.push(`${l.name} v${ver}→v${l.version}`); ver=l.version;} } if(!PK.Host.latest(d.def)){missing.push(d.def); return;} const nid=PK.addDevice(d.def,d.x,d.y,d.state,d.id,ver); if(nid&&(d.w||d.h)) PK.setSize(nid, d.w||undefined, d.h||undefined); if(nid&&d.mini) PK.setMini(nid,true); if(nid&&d.focus) PK.setFocus(nid,true,+d.focus); if(nid&&d.preset) PK.presetMark(nid,d.preset); if(nid&&d.skin) PK.skinRestore(nid,d.skin); });
   PK.layoutLoad(p); if(PK.secLoad) PK.secLoad(p);
+  if(PK.restoreFilesRun) PK.restoreFilesRun();
   // kaarten krijgen hun maat pas als hun scherm is opgebouwd: secties omsluiten hun leden en schuiven uit elkaar zodra en terwijl dat gebeurt (alleen zolang dit nog de geladen werkruimte is)
   if(PK.secTidy&&PK.Host.secs&&PK.Host.secs.length){ const mine=PK.Host.secs, tidy=()=>{ if(PK.Host.secs===mine) PK.secTidy(); }; requestAnimationFrame(tidy); setTimeout(tidy,400); setTimeout(tidy,1500); }
   if(fallback.length) PK.status(PK.pkt('m.versie_niet_aanwezig_nieuwste_gebruikt')+fallback.join(', '));

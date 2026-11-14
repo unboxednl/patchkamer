@@ -1438,6 +1438,8 @@ PK.I18N.en={
    "m.dz_d_t_tune":"Instrument tunes in the card head",
    "m.sk_pad_stat":"Pad rules: {0} of {1} pads and steps restyled on the first card of this device.",
    "m.sk_dsp_stat":"Display: {0} of {1} choice lists restyled on the first card of this device.",
+   "ui.t_restore_files":"Load files from the internet automatically when a song opens",
+   "ui.t_restore_files_note":"If a device on the floor needs files from the internet (for example a drum kit or saxophone recordings), it fetches them itself as soon as you open a song or workspace. Off: you click Load yourself. The files come from the same stated source as with that button and nothing is stored in the song.",
    "ui.t_clip_bar":"Paste on the bar line",
    "ui.t_clip_bar_note":"While the clock runs, Paste waits for the next bar. Off: Paste acts at once. Ctrl+Shift+V, Shift-click and Paste now in the paste menu always act at once.",
    "m.clip_t_opties":"Paste options for {0}: octave, align by order, length, now (also with right-click on Paste)",

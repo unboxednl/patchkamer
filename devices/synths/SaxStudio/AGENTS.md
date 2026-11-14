@@ -12,7 +12,7 @@ Gesampelde saxofoons (sopraan, alto, tenor, bariton) voor gebruik met een sequen
 | `id` | `nl.patchkamer.saxstudio`. Verander die nooit |
 | Soort | `instrument`: dit apparaat krijgt **tunes** (geen presets), categorie `synth` |
 | Poorten | eventingang `notes` (noten, ook `noteon`/`noteoff`, cc, `panic`), sturing in `mod`, audio uit `out` (stereo). Geen bundel, geen losse uitgangen |
-| Contract | v1.35 (apparaatversie 1.1.0; gebruikt het optionele `host.fetchFile` van v1.30) |
+| Contract | v1.36 (apparaatversie 1.2.0; gebruikt het optionele `host.fetchFile` van v1.30 en `restoreFiles()` van v1.36) |
 | Licentie apparaat | AGPL-3.0-or-later |
 | Skin | `../../../skins/library/nl.patchkamer.saxstudio/compact.patchkamer-skin.json` (Compact) |
 
@@ -93,12 +93,17 @@ Keuzes (strings):
 |---|---|---|---|
 | `instrument` | `sop`, `alt`, `ten`, `bar` | `alt` | Welk instrument "Laden" haalt (de tune zegt voor welk instrument hij is) |
 | `size` | `compact`, `full` | `compact` | Welke omvang "Laden" haalt |
+| `kit` | boolean | `false` | (v1.2.0) De gebruiker had opnames geladen: alleen dan haalt `restoreFiles()` ze na het openen van een song opnieuw op. `true` na een geslaagde laadbeurt, `false` na Wissen. Ontbreekt het veld in een gezette state, dan geldt `true` als er nu opnames geladen zijn, anders `false` |
 | `mode` | `mono`, `section` | `mono` | Monofoon (met legato) of sectie (polyfoon, `voices` stemmen per noot) |
 | `stack` | `unison`, `octaves`, `major`, `minor`, `fourths` | `unison` | Intervallen van de stemmen: 0 0 0 0; 0 −12 +12 −24; 0 −4 −7 −12; 0 −3 −7 −12; 0 −5 −10 −15 halve tonen |
 | `growlOn`, `fallOn`, `scoopOn` | `accent`, `long`, `all` | `accent`, `long`, `accent` | Bij welke noten de techniek klinkt: velocity ≥ `acc`; noten van minstens 0,35 s die geen staccato zijn; alle noten |
 | `room` | `off`, `room`, `plate`, `hall` | `room` | Soort ruimte (een gegenereerde stereo-impuls van 0,5 s, 1,3 s of 2,6 s) |
 
 Alle regelaars hebben een `id` (= de state-sleutel), `role` `param` (knoppen) en een `group`: `kit`, `play`, `fx`, `fxsel`, `pitch`, `sect`, `sectsel`, `tone`, `tonesel`. De groepen met knoppen (`play`, `fx`, `pitch`, `sect`, `tone`) staan elk in een eigen element, zodat de skin ze kan inkaderen. `params()` bevat 31 regelaars (alles behalve `transpose` en `voices` en de keuzes: `modExclude`); `on` staat alleen aan bij klank, ruimte, vibrato, adem, klep, growl, falloff, scoop en bite. Kleine regelaars (een `Mod`-kabel) werken op de eerstvolgende noot of, bij de regelaars die "direct" werken, meteen.
+
+## Opnames terughalen bij het openen van een song (`restoreFiles()`, v1.2.0)
+
+De host roept `restoreFiles()` aan nadat de gebruiker een song of werkruimte heeft geopend en de state met `setState` is toegepast (alleen als de gebruiker automatisch laden aan heeft). Doet niets als `kit` `false` is, als de opnames voor `instrument` en `size` al geladen zijn, als er al een laadbeurt loopt of als `host.fetchFile` ontbreekt. Anders draait hij dezelfde `loadKit()` als de knop (zelfde voortgang, statusregel en foutteksten); hij gooit nooit. `host.fetchFile` wordt alleen binnen `loadKit()` aangeroepen. Songs van voor 1.2.0 hebben geen `kit`: die tonen nog de knop tot de song opnieuw is bewaard.
 
 ## Noten en gebeurtenissen
 

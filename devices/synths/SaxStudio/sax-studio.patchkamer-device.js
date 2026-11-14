@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — restoreFiles() (contract v1.36): na het openen van een song haalt de host de opnames opnieuw op als de state `kit: true` heeft (de gebruiker had opnames geladen); dezelfde laadroutine als de knop, niets als ze al kloppen.
 // 1.1.0 — Nieuwe regelaar Schuren (rasp, standaard 0,4): bandbegrensde ruis moduleert de amplitude van de klank, zodat er rond de harmonischen een lichte ruwheid ontstaat die met de toon meeklinkt en stopt; 0 = zoals 1.0.0. Gemeten bij alt, noot 62: ruis tussen de harmonischen -24 dB (0), -20 (0,3), -15 (0,6), -11 (1); de banden boven 3 kHz veranderen niet. Niet beluisterd.
-// 1.0.0 — Sax Studio: gesampelde saxofoons (sopraan, alto, tenor, bariton) voor sequencers (Patchkamer contract v1.35).
+// 1.0.0 — Sax Studio: gesampelde saxofoons (sopraan, alto, tenor, bariton) voor sequencers (Patchkamer contract v1.36).
 //         De opnames zitten NIET in de repo en niet in Patchkamer: het apparaat haalt ze na een klik op "Laden" via host.fetchFile (contract §13i) op uit
 //         MTG Solo Saxophones (MTG, Universitat Pompeu Fabra, via freesound.org; gesneden, gelooped en in SFZ gezet door kinwie; CC BY 4.0).
 //         Spel uit de sequencer: velocity kiest laag, kleur en artikulatie (zacht = subtone met adem, hard = bite), notelengte kiest staccato,
@@ -220,7 +221,7 @@ a{color:var(--au)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}`;
 
 export default {
-  id: 'nl.patchkamer.saxstudio', name: 'Sax Studio', version: '1.1.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.saxstudio', name: 'Sax Studio', version: '1.2.0', kind: 'instrument', category: 'synth',
   ui: { width: 760, minWidth: 320 },
   about: { nl: ABOUT.nl, en: ABOUT.en },
   modExclude: MODEX,
@@ -228,7 +229,7 @@ export default {
   i18n: { en: { ports: { out: 'Stereo saxophone', notes: 'Notes' } } },
   create(ctx, host) {
     const lang = host && host.lang === 'nl' ? 'nl' : 'en', T = TXT[lang];
-    const defaults = {}; for (const p of NUM) defaults[p[0]] = p[4]; Object.assign(defaults, SEL_DEF);
+    const defaults = {}; for (const p of NUM) defaults[p[0]] = p[4]; Object.assign(defaults, SEL_DEF); defaults.kit = false;
     let state = { ...defaults }, eff = { ...defaults }, mod = {}, dead = false, root = null, self = null, stopFrame = null, error = '', guardTimer = null;
     const owned = new Set(), voices = new Set(), held = new Map(), ui = { knobs: {}, sels: {} };
     let kit = null, job = null, status = '', statusErr = false, cur = null, lastArt = null, lastGuard = -1;
@@ -528,12 +529,20 @@ export default {
       if (J.ctl.signal.aborted) { status = T.aborted; statusErr = false; paintKit(); return; }
       for (const k of Object.keys(lib.layers)) lib.layers[k].sort((a, b) => a.nat - b.nat);
       if (!ok || !Object.keys(lib.layers).length) { status = T.failAll(J.fail.length ? errText(J.fail[0]) : T.errOther); statusErr = true; paintKit(); return; }
-      normalise(lib); stopAll(.05); lib.bytes = J.bytes; lib.dec = dec; lib.files = ok; kit = lib;
+      normalise(lib); stopAll(.05); lib.bytes = J.bytes; lib.dec = dec; lib.files = ok; kit = lib; state.kit = true;
       status = J.fail.length ? T.partial(ok, J.fail.length, errText(J.fail[0])) : T.loaded(NAMES[inst][lang === 'nl' ? 0 : 1], ok, mbOf(J.bytes), mbOf(dec)); statusErr = J.fail.length > 0;
       paintKit(); paintAud();
     }
+    // v1.36: door de host aangeroepen na het openen van een song; alleen als de state opnames wil (kit: true) en die er nog niet (of andere) zijn
+    async function restoreFiles() {
+      try {
+        if (dead || job || !state.kit || !canNet()) return;
+        if (kit && kit.inst === state.instrument && kit.size === state.size) return;
+        await loadKit();
+      } catch (e) { status = errText(e); statusErr = true; try { paintKit(); } catch (e2) { /* */ } }
+    }
     function cancelLoad() { if (job) job.ctl.abort(); }
-    function clearKit() { if (job) return; stopAll(.05); kit = null; status = T.cleared; statusErr = false; paintKit(); }
+    function clearKit() { if (job) return; stopAll(.05); kit = null; state.kit = false; status = T.cleared; statusErr = false; paintKit(); }
 
     // ---- UI ----
     const adopt = (el, id, role, group, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
@@ -658,12 +667,13 @@ export default {
         if (isObj(offsets)) for (const p of NUM) { if (MODEX.includes(p[0])) continue; const v = offsets[p[0]]; if (typeof v === 'number' && Number.isFinite(v)) next[p[0]] = clamp(v, -1, 1); }
         mod = next; apply();
       },
+      restoreFiles,
       getState() { return { ...state }; },
       setState(raw) {
         if (dead) return; const s = isObj(raw) ? raw : {}, next = { ...defaults };
         for (const p of NUM) if (typeof s[p[0]] === 'number' && Number.isFinite(s[p[0]])) next[p[0]] = norm(p, s[p[0]]);
         for (const k of Object.keys(SELECTS)) if (typeof s[k] === 'string' && SELECTS[k].includes(s[k])) next[k] = s[k];
-        state = next; apply();
+        next.kit = typeof s.kit === 'boolean' ? s.kit : !!kit; state = next; apply();
         for (const id of Object.keys(ui.knobs)) if (ui.knobs[id] && ui.knobs[id].set) ui.knobs[id].set(state[id]);
         for (const id of Object.keys(ui.sels)) if (ui.sels[id] && Object.hasOwn(state, id)) ui.sels[id].value = state[id];
         paintKit(); paintAud();

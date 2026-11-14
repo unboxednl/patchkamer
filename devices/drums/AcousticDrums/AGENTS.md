@@ -4,7 +4,7 @@ Dit bestand is voor AI-agents die **tunes voor Acoustic Drums** maken, het appar
 
 ## Wat Acoustic Drums is
 
-Een gesampled akoestisch drumstel voor funk, soul en jazz. De opnames zitten **niet** in de repo en niet in Patchkamer: het apparaat haalt ze na een klik op "Kit laden" via `host.fetchFile` (contract §13i) op uit Virtuosity Drums. `getState()` bevat alleen instellingen, nooit audio. Een tune, preset of song laadt dus geen kit: zonder kit speelt het apparaat stil en toont de kaart dat.
+Een gesampled akoestisch drumstel voor funk, soul en jazz. De opnames zitten **niet** in de repo en niet in Patchkamer: het apparaat haalt ze na een klik op "Kit laden" via `host.fetchFile` (contract §13i) op uit Virtuosity Drums. `getState()` bevat alleen instellingen, nooit audio. Een tune of preset laadt dus geen kit: zonder kit speelt het apparaat stil en toont de kaart dat. Een song kan de kit wel zelf laten terughalen: zie `restoreFiles()` hieronder.
 
 | | |
 |---|---|
@@ -12,7 +12,7 @@ Een gesampled akoestisch drumstel voor funk, soul en jazz. De opnames zitten **n
 | `id` | `nl.patchkamer.acousticdrums`. Verander die nooit |
 | Soort | `instrument`: dit apparaat krijgt **tunes** (geen presets) |
 | Poorten | audio uit `mix`, `kick`, `snare`, `hats`, `toms`, `cymbals`, `room`; event in `trigger`; sturing in `mod`; bundel uit `multi` (de vijf groepen) |
-| Contract | v1.35 (apparaatversie 1.0.0; gebruikt het optionele `host.fetchFile` van v1.30) |
+| Contract | v1.36 (apparaatversie 1.1.0; gebruikt het optionele `host.fetchFile` van v1.30 en `restoreFiles()` van v1.36) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Bron, licentie en vermelding
@@ -44,6 +44,7 @@ Niet in de sets: de doorlopende snare-roll (WAV, 3 tot 4 MB per laag), de percus
 |---|---|---|---|
 | `set` | Welke set "Kit laden" haalt | `funk`, `funklite`, `jazz` | `funk` |
 | `mics` | Welke microfoons "Kit laden" haalt | niet-lege lijst van `kickmic`, `snaremic`, `oh`, `mid`, `room`, `lofi` | `["mid"]` |
+| `kit` | (v1.1.0) Of de gebruiker een kit had geladen; alleen dan haalt `restoreFiles()` na het openen van een song `set` en `mics` opnieuw op. Wordt `true` na een geslaagde laadbeurt, `false` na Wissen. Niet in een tune of preset | boolean | `false` |
 | `master` | Hoofdniveau | 0 … 1 | 0,8 |
 | `levels.kick/snare/hats/toms/cymbals` | Niveau per groep | 0 … 1,5 | 1 |
 | `micMix.<mic>.level` / `.pan` | Niveau en pan per microfoon | 0 … 1,5 en −1 … 1 | kickmic .8, snaremic .8, oh 1, mid 1, room .8, lofi .5; pan 0 |
@@ -60,6 +61,10 @@ Niet in de sets: de doorlopende snare-roll (WAV, 3 tot 4 MB per laag), de percus
 | `run`, `pattern`, `length`, `patterns` | Eigen sequencer: aan, patroon A–D, lengte 1–32, 4 × 12 rijen × 32 stappen met velocity 0 … 1 | | uit, A, 16, een funkgroove in A |
 
 Alle regelaars zijn ook stuurbaar (`params()`, 32 stuks, id = het pad in de state). Ongeldige waarden vallen op de standaard terug, getallen worden afgekapt, onbekende velden genegeerd; `setState` start nooit een download.
+
+## Kit terughalen bij het openen van een song (`restoreFiles()`, v1.1.0)
+
+De host roept `restoreFiles()` aan nadat de gebruiker een song of werkruimte heeft geopend en de state met `setState` is toegepast (alleen als de gebruiker automatisch laden aan heeft). Doet niets als `kit` `false` is, als de kit voor `set` en `mics` al geladen is, als er al een laadbeurt loopt of als de host geen `host.fetchFile` heeft. Anders draait hij dezelfde `loadKit()` als de knop (zelfde voortgang, statusregel en foutteksten); hij gooit nooit. `host.fetchFile` wordt alleen binnen `loadKit()` aangeroepen. Songs van voor 1.1.0 hebben geen `kit`: die tonen nog de knop tot de song opnieuw is bewaard.
 
 ## Noten en lanes
 

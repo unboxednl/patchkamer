@@ -286,6 +286,8 @@ Een **skin** verandert alleen het **uiterlijk** van één apparaat, nooit de kla
 
 **Standaardskin voor nieuwe apparaten.** Onder **Instellingen** kies je **Standaardskin voor nieuwe apparaten**: **Standaard** of **Compact (kleine schermen)**. Een apparaat dat je daarna plaatst krijgt de skin met de naam Compact als hij er een heeft; anders blijft hij Standaard. Apparaten die al staan en songs veranderen niet, en op de kaart kies je altijd zelf bij **Skin**. De keuze is een voorkeur van deze browser.
 
+**Bestanden van internet bij het openen van een song.** Onder **Instellingen** staat **Bestanden van internet automatisch laden bij het openen van een song** (standaard aan). Staat er een apparaat op de vloer dat bestanden nodig heeft, zoals een drumkit (Acoustic Drums), saxofoonopnames (Sax Studio) of samples (Pad Sampler), dan haalt dat apparaat ze zelf op zodra je een song of werkruimte opent, van dezelfde vermelde bron als bij zijn knop Laden. Uit: je klikt zelf op Laden. Een preset of tune in een song staat daarna ook gekozen in zijn keuzelijst, zodra de bibliotheek met die naam geladen is (zie **Instellingen → Automatisch laden**).
+
 **Bewaren.** De keuze per apparaat staat in de werkruimte en in de song, samen met de gebruikte skins (hoogstens 20), zodat een song zijn uiterlijk behoudt zonder de bibliotheek. Bij het openen komen die skins stil in je register (een nieuwere versie wint). Werkruimtes en songs zonder skins laden zoals altijd. Skins raken de klank nooit: de instelling van het apparaat is met en zonder skin gelijk.
 
 **Ontwerpkeuzes (skincontract 0.8).** Een skin kan naast CSS ook **ontwerpkeuzes** bevatten die op elk apparaat werken, als standaard van de skin en per verschijningsvorm te overschrijven:

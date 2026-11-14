@@ -4,6 +4,14 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.45.0 (2026-11-14)
+
+### Toegevoegd
+- **Kits en opnames laden vanzelf bij het openen van een song** (contract v1.36): een apparaat mag een methode `restoreFiles()` hebben die de host, een apparaat per keer, aanroept nadat een song of werkruimte is geopend en de state is toegepast. Acoustic Drums (1.1.0) en Sax Studio (1.2.0) gebruiken haar om de kit of de opnames op te halen waar hun bewaarde state naar wijst, precies zoals hun knop Laden (zelfde bron, voortgang en foutmeldingen). Nieuw state-veld `kit` (false tot een kit is geladen; songs die hiervoor zijn bewaard houden de knop tot ze opnieuw bewaard zijn). De drie funksongs hebben `kit` aan. Nieuwe instelling **Bestanden van internet automatisch laden bij het openen van een song** (standaard aan); uit betekent zelf op Laden klikken. `create`, `mount` en `setState` halen nog steeds nooit iets op. Validator, contract (NL en EN) en tests kennen de nieuwe methode.
+
+### Opgelost
+- **"(bibliotheek niet geladen)" naast een preset of tune na het openen van een song.** Een song bewaart het bibliotheek-id van de computer waar hij is gemaakt, en dat bestaat elders niet. De host kiest nu de preset of tune met dezelfde naam uit een geladen bibliotheek van dat apparaat (ook als de bibliotheek later klaar is), zodat presets van Master Chain en andere apparaten als gekozen staan. De waarden zelf zaten altijd al in de state van het apparaat.
+
 ## 0.44.0 (2026-11-14)
 
 ### Gewijzigd

@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.35 for building agents
+# Patchkamer — Instrument contract v1.36 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -44,6 +44,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.33 | Explanation for the device and no title of its own any more: the optional definition field `about` (a text, or an object per language `{ nl, en }`; paragraphs separated by a blank line) is in the card menu as **About {name}**. The host shows the ports of wider devices as dots in the title bar. A device no longer repeats its own name in its UI and puts its explanation in `about` (§12g). Existing devices keep working. |
 | v1.34 | Reporting delay: a device that delays the sound (lookahead, oversampling, a grain engine) can offer the optional method `latency()` (seconds, 0 to 10) and call `host.latencyChanged(this)` when the value changes. The host shows the delay on the card's title bar and in the text at a cable (delay up to here), but does not compensate (§13j). The validator checks `latency()`. Existing devices keep working. |
 | v1.35 | Reading and writing another device's song: `host.stateOf(this, targetId)` returns a JSON copy of another device's state, `host.setStateOf(this, targetId, state)` sets a state through that device's `setState`, only shortly after a user click. Meant for a device that analyses a sequencer's song or puts a remix in it. Optional; existing devices keep working (§13k). |
+| v1.36 | Restoring files when a song is opened: the optional method `restoreFiles()` lets a device, after the user has opened a song or workspace, fetch again the files from the internet (`host.fetchFile`) that belong to its saved state (for example the kit of Acoustic Drums), so the user does not have to click a button after every song. The host only calls the method if the user has that on in the settings. Optional; existing devices keep working (§13i). |
 
 ---
 
@@ -155,6 +156,7 @@ export default {
 | `onBundle(portId, key, bundle)` | with `multiIn` | Bundle connected, changed or detached (v1.5, §11) |
 | `getPreset()`, `setPreset(p)` | no | Only if a preset should not contain something (v1.6, §13). Always together. |
 | `latency()` | no | The delay in seconds the device adds between audio input and audio output (v1.34, §13j). Light and free of side effects. |
+| `restoreFiles()` | no | Fetch again the files from the internet that belong to the saved state, after the user has opened a song or workspace (v1.36, §13i). May return a promise; never throws. |
 
 Order when placing a card: `create` → `mount` → `setState(saved)` (if there is saved state) → cables. When loading a workspace the cables come only afterwards, in a following frame.
 
@@ -1146,7 +1148,7 @@ A device may not use the network (§15). If it still wants one file from the int
 **Errors.** The promise rejects with an `Error` with `code` (and sometimes `status` or `max`): `url` (the address is not allowed, or `this` is not a device on the floor), `aborted` (cancelled via `signal`), `network` (the call did not arrive: no connection, or the server does not allow the call from the browser (CORS)), `http` (the server answered with an error status; `status`), `size` (larger than `maxBytes`; `max`) and `response` (only with `as: 'json'`: the content is not valid JSON). The device makes the text for the user itself, per `code`, in `host.lang`.
 
 **What the host handles, and what you must do.**
-- **Only after a click.** Call `fetchFile` only on a user action (a button, choosing a bank). `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` and `destroy` never start a call; the validator gives an error if that happens. The host does **not** ask for confirmation itself: the device visibly says before the click where the file comes from.
+- **Only after a click.** Call `fetchFile` only on a user action (a button, choosing a bank). `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` and `destroy` never start a call; the validator gives an error if that happens. The host does **not** ask for confirmation itself: the device visibly says before the click where the file comes from. The only exception: `restoreFiles()` after a song is opened (v1.36, see below).
 - **Only https.** An address with another scheme, with credentials in the address (`user:password@`), with `localhost` or a name on `.localhost` or `.local`, with an IPv4 address (`192.168.0.1`) or an IPv6 address as the name is refused with `url`. An ordinary name that points to an address on the own network is not stopped by the host, and it does not check where a redirect (which the host follows) goes. So only fetch from sources you know.
 - **No traces.** The call goes without credentials (`credentials: 'omit'`: no cookies) and without a `Referer`. The host sends no keys; a token of the user (for example for a sample library) the device puts in the address itself and never stores in `getState()`, a preset, a tune or a song.
 - **Limit on the size.** If the server reports a length above `maxBytes`, the host refuses at once with `size`; otherwise it counts the bytes while fetching and stops as soon as the limit is reached. Set `maxBytes` as low as fits what you expect.
@@ -1156,6 +1158,25 @@ A device may not use the network (§15). If it still wants one file from the int
 - **Old host.** A host without v1.30 has no `host.fetchFile`. Check `typeof host.fetchFile === 'function'` and show a message otherwise; loading locally and dragging keep working.
 
 What the host does not do: it does not guarantee that a server is reachable or that the browser allows the call (CORS), does not check the content and stores nothing.
+
+### Restoring files when a song is opened (v1.36)
+
+A device that needs files from the internet for its sound (Acoustic Drums: the samples of the chosen kit) does not keep them in the state (see "Result in the state" above). Without help the user has to click the load button after opening every song. The optional method `restoreFiles()` solves that.
+
+| Call | What |
+|---|---|
+| `restoreFiles()` (on the instance, optional) | The host calls it (without arguments; it may return a promise) on every device on the floor that has the method, **after** a song or workspace has been opened by the user and the state has been applied with `setState`. The host only calls it if the user has the setting "Load files from the internet automatically when opening a song" on (default on). The device does not check that setting itself. |
+
+**Rules for the device.**
+- Fetch only what the device's own state points to (for example the chosen kit size and microphones). If there is nothing to restore, or everything is already loaded, do nothing.
+- Use the same load routine, the same `host.fetchFile` calls and the same confirmations as the button: the same progress (`onProgress`), the same error texts per `code`, the same limits (`maxBytes`, `signal`). Fetch at most once per call.
+- Never block and never throw: show an error the way the button does (and the promise may reject or recover). The sound and the rest of the device keep working, also without files.
+- `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` and `destroy` **never** fetch by themselves. Only `restoreFiles()` (called by the host after opening) and a click by the user start a `host.fetchFile` call.
+- The files come from the same source as with the button and fall under the same rules for rights (§13i above).
+
+**The validator.** It does not call `restoreFiles` during the test of the rest, but if the method exists it checks that it is a function and that, without network (the fake host refuses `host.fetchFile` with `network`), it does not throw synchronously and returns a promise or nothing. A rejecting promise is allowed. A `host.fetchFile` call inside `restoreFiles` does not count as a call without a click.
+
+**Old host.** A host without v1.36 does not call `restoreFiles()`; the load button remains the way.
 
 ## 13j. Reporting delay (v1.34)
 
@@ -1187,6 +1208,7 @@ For a helper device that looks at the contents of another device and puts someth
 | Call | What |
 |---|---|
 | `host.stateOf(this, targetId)` | A JSON copy of the target's `getState()` (an id from `host.peers(this)`), or `null` for an unknown target, yourself, a preview card in the library, a target without `getState`, or a state that does not go to JSON. Read-only; what you do with it does not touch the target. |
+| `restoreFiles()` (on the instance) | v1.36 | The host calls it after a song or workspace is opened, if the user has automatic loading on; the device fetches its files from the internet again (§13i). |
 | `host.setStateOf(this, targetId, state)` | Sets `state` (a plain JSON object, at most 8 MB) with the target's `setState()`. The target sanitises it itself (§13). Returns `true` if the state was offered and `setState` did not throw, otherwise `false`. Only shortly after a click or key press by the user; without it the host returns `false` and does nothing. |
 
 - **A copy, not a reference.** Change the copy from `stateOf` and write it back with `setStateOf`. Never replace everything blindly: start from the state you read and change only what you mean to, so fields you do not know are kept.
@@ -1334,6 +1356,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 24. **Files from the internet (v1.30, §13i)**: the fake host knows `host.fetchFile(this, url, opts)` and rejects with `network`. A call during the test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` or `destroy`) is an error: a network call only starts on a click of the user. The check for `fetch(` does not see `host.fetchFile(` as network traffic.
 25. **Delay (v1.34, §13j)**: a device with `latency()` returns a finite number from 0 to 10 (seconds), in the initial state and after `setState`; `getState()` is equal afterwards. The fake host knows `host.latencyChanged(this)`.
 26. **State of another device (v1.35, §13k)**: the fake host knows `host.stateOf(this, targetId)` (returns `null`) and `host.setStateOf(this, targetId, state)` (returns `false`). The validator checks nothing else about it.
+27. **Restoring files (v1.36, §13i)**: a device with `restoreFiles()` gives a function that does not throw synchronously without network and returns a promise or nothing; a rejecting promise is allowed; a `host.fetchFile` call inside it does not count as a call without a click. The validator calls it once after the other checks.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -1370,7 +1393,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 27. Files from the internet (v1.30, optional): `host.fetchFile` only on a click; `typeof host.fetchFile === 'function'` checked; visibly said where the file comes from; `maxBytes` set low; cancelling via `signal`; text per error code in `host.lang`; license and attribution of what you fetch kept; no token in the state; content never executed (§13i).
 28. Delay (v1.34, optional): `latency()` returns seconds (0 to 10), only of what is known and measured, without side effects and without changing the state; on a change call `host.latencyChanged` (after `typeof host.latencyChanged === 'function'`); the dry path of a device with `mix` is delayed as long as the wet one (§13j).
 29. State of another device (v1.35, optional): `host.setStateOf` only on a click by the user and never in `create`, `mount`, `setState`, `setPreset` or a timer; start from the state you read, leave unknown fields, leave the original where possible and keep the old state for Restore; `typeof host.stateOf === 'function'` checked (§13k).
-30. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+30. Restoring files (v1.36, optional): `restoreFiles()` fetches only what the device's own state points to, nothing if there is nothing to restore or all is loaded, the same load routine, progress and error display as the button, at most one fetch per call, never blocks or throws; `create`, `mount` and `setState` never fetch by themselves (§13i).
+31. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 

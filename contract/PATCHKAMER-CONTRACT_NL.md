@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.35 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.36 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -44,6 +44,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.33 | Uitleg bij het apparaat en geen eigen titel meer: de optionele definitieregel `about` (een tekst, of een object per taal `{ nl, en }`; alinea's gescheiden door een lege regel) staat in het menu van de kaart als **Over {naam}**. De host toont de poorten van breedere apparaten als stipjes in de titelbalk. Een apparaat noemt zijn eigen naam niet meer in zijn UI en zet zijn uitleg in `about` (§12g). Bestaande apparaten blijven werken. |
 | v1.34 | Vertraging melden: een apparaat dat het geluid vertraagt (lookahead, oversampling, een korrelmotor) kan de optionele methode `latency()` aanbieden (seconden, 0 tot 10) en `host.latencyChanged(this)` aanroepen als de waarde verandert. De host toont de vertraging op de titelbalk van de kaart en in de tekst bij een kabel (vertraging tot hier), maar compenseert niet (§13j). De validator controleert `latency()`. Bestaande apparaten blijven werken. |
 | v1.35 | De song van een ander apparaat lezen en schrijven: `host.stateOf(this, doelId)` geeft een JSON-kopie van de state van een ander apparaat, `host.setStateOf(this, doelId, state)` zet een state via `setState` van dat apparaat, alleen kort na een klik van de gebruiker. Bedoeld voor een apparaat dat de song van een sequencer analyseert of er een remix in zet. Optioneel; bestaande apparaten blijven werken (§13k). |
+| v1.36 | Bestanden herstellen bij het openen van een song: de optionele methode `restoreFiles()` laat een apparaat, nadat de gebruiker een song of werkruimte heeft geopend, de bestanden van internet (`host.fetchFile`) opnieuw ophalen die bij zijn bewaarde state horen (bijvoorbeeld de kit van Acoustic Drums), zodat de gebruiker niet na elke song op een knop hoeft te klikken. De host roept de methode alleen aan als de gebruiker dat in de instellingen aan heeft. Optioneel; bestaande apparaten blijven werken (§13i). |
 
 ---
 
@@ -155,6 +156,7 @@ export default {
 | `onBundle(poortId, sleutel, bundel)` | bij `multiIn` | Bundel aangesloten, gewijzigd of los (v1.5, §11) |
 | `getPreset()`, `setPreset(p)` | nee | Alleen als een preset iets niet moet bevatten (v1.6, §13). Altijd samen. |
 | `latency()` | nee | De vertraging in seconden die het apparaat tussen audio-ingang en -uitgang toevoegt (v1.34, §13j). Licht en zonder bijwerkingen. |
+| `restoreFiles()` | nee | Bestanden van internet opnieuw ophalen die bij de bewaarde state horen, nadat de gebruiker een song of werkruimte heeft geopend (v1.36, §13i). Mag een belofte geven; gooit nooit. |
 
 Volgorde bij het plaatsen van een kaart: `create` → `mount` → `setState(opgeslagen)` (als er een opgeslagen state is) → kabels. Bij het laden van een werkruimte komen de kabels pas daarna, in een volgend frame.
 
@@ -1146,7 +1148,7 @@ Een apparaat mag geen netwerk gebruiken (§15). Wil het toch één bestand van i
 **Fouten.** De belofte weigert met een `Error` met `code` (en soms `status` of `max`): `url` (het adres wordt niet toegestaan, of `this` is geen apparaat op de vloer), `aborted` (geannuleerd via `signal`), `network` (de aanroep kwam niet aan: geen verbinding, of de server staat de aanroep vanuit de browser niet toe (CORS)), `http` (de server antwoordde met een foutstatus; `status`), `size` (groter dan `maxBytes`; `max`) en `response` (alleen bij `as: 'json'`: de inhoud is geen geldige JSON). Tekst voor de gebruiker maakt het apparaat zelf, per `code`, in `host.lang`.
 
 **Wat de host regelt, en wat jij moet doen.**
-- **Alleen na een klik.** Roep `fetchFile` alleen aan op een handeling van de gebruiker (een knop, het kiezen van een bank). `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` en `destroy` starten nooit een aanroep; de validator geeft een fout als dat gebeurt. De host vraagt zelf **niet** om bevestiging: het apparaat zegt zichtbaar vóór de klik waar het bestand vandaan komt.
+- **Alleen na een klik.** Roep `fetchFile` alleen aan op een handeling van de gebruiker (een knop, het kiezen van een bank). `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` en `destroy` starten nooit een aanroep; de validator geeft een fout als dat gebeurt. De host vraagt zelf **niet** om bevestiging: het apparaat zegt zichtbaar vóór de klik waar het bestand vandaan komt. Enige uitzondering: `restoreFiles()` na het openen van een song (v1.36, zie hieronder).
 - **Alleen https.** Een adres met een ander schema, met inloggegevens in het adres (`gebruiker:wachtwoord@`), met `localhost` of een naam op `.localhost` of `.local`, met een IPv4-adres (`192.168.0.1`) of een IPv6-adres als naam wordt geweigerd met `url`. Een gewone naam die naar een adres op het eigen netwerk wijst, houdt de host niet tegen, en hij controleert niet waar een doorverwijzing (`redirect`, die de host volgt) naartoe gaat. Haal dus alleen op bij bronnen die je kent.
 - **Geen sporen.** De aanroep gaat zonder inloggegevens (`credentials: 'omit'`: geen cookies) en zonder `Referer`. De host stuurt geen sleutels mee; een token van de gebruiker (bijvoorbeeld bij een bibliotheek met samples) zet het apparaat zelf in het adres en bewaart het nooit in `getState()`, een preset, een tune of een song.
 - **Grens aan de grootte.** Meldt de server een lengte boven `maxBytes`, dan weigert de host meteen met `size`; anders telt hij de bytes tijdens het ophalen en stopt zodra de grens is bereikt. Zet `maxBytes` zo laag als past bij wat je verwacht.
@@ -1156,6 +1158,25 @@ Een apparaat mag geen netwerk gebruiken (§15). Wil het toch één bestand van i
 - **Oude host.** Een host zonder v1.30 heeft geen `host.fetchFile`. Controleer `typeof host.fetchFile === 'function'` en toon anders een melding; lokaal laden en slepen blijven dan werken.
 
 Wat de host niet doet: hij garandeert niet dat een server bereikbaar is of dat de browser de aanroep toestaat (CORS), controleert de inhoud niet en bewaart niets.
+
+### Bestanden herstellen bij het openen van een song (v1.36)
+
+Een apparaat dat bestanden van internet bij zijn geluid nodig heeft (Acoustic Drums: de samples van de gekozen kit) bewaart ze niet in de state (zie "Resultaat in de state" hierboven). Zonder hulp moet de gebruiker na het openen van elke song zelf op de laadknop klikken. Daarvoor is de optionele methode `restoreFiles()`.
+
+| Aanroep | Wat |
+|---|---|
+| `restoreFiles()` (op de instance, optioneel) | De host roept hem aan (zonder argumenten; hij mag een belofte geven) op elk apparaat op de vloer dat de methode heeft, **nadat** een song of werkruimte door de gebruiker is geopend en de state met `setState` is toegepast. De host roept hem alleen aan als de gebruiker de instelling "Bestanden van internet automatisch laden bij het openen van een song" aan heeft (standaard aan). Het apparaat controleert die instelling niet zelf. |
+
+**Regels voor het apparaat.**
+- Haal alleen op wat de eigen state aanwijst (bijvoorbeeld de gekozen kitomvang en microfoons). Is er niets te herstellen, of is alles al geladen, doe dan niets.
+- Gebruik dezelfde laadroutine, dezelfde `host.fetchFile`-aanroepen en dezelfde bevestigingen als de knop: dezelfde voortgang (`onProgress`), dezelfde foutteksten per `code`, dezelfde grenzen (`maxBytes`, `signal`). Hoogstens één keer ophalen per aanroep.
+- Nooit blokkeren en nooit een uitzondering gooien: een fout toon je zoals bij de knop (en de belofte mag weigeren of herstellen). Het geluid en de rest van het apparaat blijven werken, ook zonder bestanden.
+- `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` en `destroy` blijven **nooit** zelf ophalen. Alleen `restoreFiles()` (door de host aangeroepen na het openen) en een klik van de gebruiker starten een aanroep van `host.fetchFile`.
+- De bestanden komen van dezelfde bron als bij de knop en vallen onder dezelfde regels voor rechten (§13i hierboven).
+
+**De validator.** Roept `restoreFiles` niet aan tijdens de test van de rest, maar controleert als de methode bestaat dat het een functie is en dat hij, zonder netwerk (de nep-host weigert `host.fetchFile` met `network`), niet synchroon gooit en een belofte of niets geeft. Een weigerende belofte is toegestaan. Een `host.fetchFile`-aanroep binnen `restoreFiles` telt niet als een aanroep zonder klik.
+
+**Oude host.** Een host zonder v1.36 roept `restoreFiles()` niet aan; de laadknop blijft dan de weg.
 
 ## 13j. Vertraging melden (v1.34)
 
@@ -1187,6 +1208,7 @@ Voor een hulpapparaat dat de inhoud van een ander apparaat bekijkt en daar iets 
 | Aanroep | Wat |
 |---|---|
 | `host.stateOf(this, doelId)` | Een JSON-kopie van `getState()` van het doel (een id uit `host.peers(this)`), of `null` bij een onbekend doel, jijzelf, een voorbeeldkaart in de bibliotheek, een doel zonder `getState` of een state die niet naar JSON gaat. Alleen lezen; wat je ermee doet, raakt het doel niet. |
+| `restoreFiles()` (op de instance) | v1.36 | De host roept hem aan na het openen van een song of werkruimte, als de gebruiker automatisch laden aan heeft; het apparaat haalt zijn bestanden van internet opnieuw op (§13i). |
 | `host.setStateOf(this, doelId, state)` | Zet `state` (een gewoon JSON-object, hoogstens 8 MB) met `setState()` van het doel. Het doel zuivert zelf (§13). Geeft `true` als de state is aangeboden en `setState` niet gooide, anders `false`. Alleen kort na een klik of toets van de gebruiker; zonder die klik geeft de host `false` en doet niets. |
 
 - **Een kopie, geen verwijzing.** Wijzig de kopie van `stateOf` en schrijf haar met `setStateOf` terug. Vervang nooit blind alles: begin bij de gelezen state en wijzig alleen wat je bedoelt, zodat velden die jij niet kent behouden blijven.
@@ -1335,6 +1357,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 24. **Bestanden van internet (v1.30, §13i)**: de nep-host kent `host.fetchFile(this, url, opts)` en weigert met `network`. Een aanroep tijdens de test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` of `destroy`) is een fout: een netwerkaanroep start alleen op een klik van de gebruiker. De controle op `fetch(` ziet `host.fetchFile(` niet als netwerkverkeer.
 25. **Vertraging (v1.34, §13j)**: een apparaat met `latency()` geeft een eindig getal van 0 tot 10 (seconden), in de beginstand en na `setState`; `getState()` is daarna gelijk. De nep-host kent `host.latencyChanged(this)`.
 26. **State van een ander apparaat (v1.35, §13k)**: de nep-host kent `host.stateOf(this, doelId)` (geeft `null`) en `host.setStateOf(this, doelId, state)` (geeft `false`). De validator controleert er verder niets van.
+27. **Bestanden herstellen (v1.36, §13i)**: een apparaat met `restoreFiles()` geeft een functie die zonder netwerk niet synchroon gooit en een belofte of niets geeft; een weigerende belofte is toegestaan; een `host.fetchFile`-aanroep daarbinnen telt niet als een aanroep zonder klik. De validator roept hem één keer aan na de overige controles.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -1371,7 +1394,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 27. Bestanden van internet (v1.30, optioneel): `host.fetchFile` alleen op een klik; `typeof host.fetchFile === 'function'` gecontroleerd; zichtbaar gezegd waar het bestand vandaan komt; `maxBytes` laag gezet; annuleren via `signal`; tekst per foutcode in `host.lang`; licentie en vermelding van wat je ophaalt bewaard; geen token in de state; inhoud nooit uitgevoerd (§13i).
 28. Vertraging (v1.34, optioneel): `latency()` geeft seconden (0 tot 10), alleen van wat bekend en gemeten is, zonder bijwerkingen en zonder de state te veranderen; bij een wijziging `host.latencyChanged` (na `typeof host.latencyChanged === 'function'`); de droge weg van een apparaat met `mix` loopt even lang vertraagd als de natte (§13j).
 29. State van een ander apparaat (v1.35, optioneel): `host.setStateOf` alleen op een klik van de gebruiker en nooit in `create`, `mount`, `setState`, `setPreset` of een timer; begin bij de gelezen state, laat onbekende velden staan, laat het origineel waar het kan staan en bewaar de oude state voor Herstel; `typeof host.stateOf === 'function'` gecontroleerd (§13k).
-30. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `waarschuwing`.
+30. Bestanden herstellen (v1.36, optioneel): `restoreFiles()` haalt alleen op wat de eigen state aanwijst, niets als er niets te herstellen of al geladen is, dezelfde laadroutine, voortgang en foutweergave als de knop, hoogstens één keer ophalen per aanroep, nooit blokkeren of gooien; `create`, `mount` en `setState` halen nooit zelf op (§13i).
+31. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `waarschuwing`.
 
 ---
 

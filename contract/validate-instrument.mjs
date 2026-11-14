@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.35
+// validate-instrument.mjs — Patchkamer contract v1.36
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -19,6 +19,7 @@
 // v1.16 (§8): dekking van params(): elke continue regelaar (type=range, host.ui.knob, host.ui.adopt) hoort in params() te staan, met id = state-sleutel,
 //        of bewust uitgesloten te zijn met `modExclude: [ids]` (of '*') op de definitie. Alleen "let op" (nooit een fout) voor: continue regelaars die niet in params() staan,
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
+// v1.36: optioneel restoreFiles() (bestanden van internet herstellen na het openen van een song, §13i): een functie die zonder netwerk niet gooit en een belofte of niets geeft; een fetchFile-aanroep daarbinnen telt niet als "zonder klik".
 // v1.35: host.stateOf(inst, doelId) en host.setStateOf(inst, doelId, state): de state van een ander apparaat lezen en schrijven; de nep-host geeft null en false.
 // v1.34: optioneel latency() (seconden, 0 tot 10) en host.latencyChanged(inst): de vertraging die het apparaat tussen audio-ingang en -uitgang toevoegt; gooit niet, verandert de state niet, blijft eindig na setState.
 // v1.33: optioneel `about` (tekst of object per taal, hoogstens 8000 tekens): anders een fout.
@@ -201,6 +202,9 @@ const V = {
     "v.latency_state": "latency() verandert de state (hij moet licht zijn en geen bijwerkingen hebben)",
     "v.latency_na_setstate": "na setState",
     "v.latency_in_rust": "in de beginstand",
+    "v.restorefiles_geen_functie": "restoreFiles (v1.36) moet een functie zijn",
+    "v.restorefiles_gooit": "restoreFiles() gooit (hij mag nooit synchroon een uitzondering gooien; fouten horen in de belofte of op het scherm): ",
+    "v.restorefiles_resultaat": "restoreFiles() moet een belofte of niets (undefined) geven, kreeg: ",
     "v.notenames_gooit": "noteNames() gooit: ",
     "v.notenames_ongeldig": "noteNames() moet een lijst van { note: 0..127, name: tekst } geven, kreeg: ",
     "v.een_host_frame_tekenfunctie_gooit": "een host.frame-tekenfunctie gooit: ",
@@ -455,6 +459,9 @@ const V = {
     "v.latency_state": "latency() changes the state (it must be light and free of side effects)",
     "v.latency_na_setstate": "after setState",
     "v.latency_in_rust": "in the initial state",
+    "v.restorefiles_geen_functie": "restoreFiles (v1.36) must be a function",
+    "v.restorefiles_gooit": "restoreFiles() throws (it must never throw synchronously; errors belong in the promise or on screen): ",
+    "v.restorefiles_resultaat": "restoreFiles() must return a promise or nothing (undefined), got: ",
     "v.notenames_gooit": "noteNames() throws: ",
     "v.notenames_ongeldig": "noteNames() must return a list of { note: 0..127, name: text }, got: ",
     "v.een_host_frame_tekenfunctie_gooit": "a host.frame draw function throws: ",
@@ -983,6 +990,17 @@ if (inst.latency !== undefined) {
   lat(vt('v.latency_in_rust')); lat(vt('v.latency_in_rust'));
   let after; try { after = JSON.stringify(inst.getState()); } catch (e) { fail(vt('v.getstate_gooit') + e.message); } if (norm(after) !== norm(before)) fail(vt('v.latency_state'));
   try { inst.setState(JSON.parse(before)); } catch (e) { fail('setState() faalt: ' + e.message); } lat(vt('v.latency_na_setstate'));
+}
+// v1.36 (§13i): restoreFiles() is optioneel; als hij er is een functie die zonder netwerk niet synchroon gooit en een belofte of niets geeft (fouten in de belofte zijn toegestaan). Een host.fetchFile-aanroep daarbinnen telt niet als "zonder klik"
+if (inst.restoreFiles !== undefined) {
+  if (typeof inst.restoreFiles !== 'function') fail(vt('v.restorefiles_geen_functie'));
+  else {
+    const fetchBefore = fetchFileCalls; let rf;
+    try { rf = inst.restoreFiles(); } catch (e) { fail(vt('v.restorefiles_gooit') + e.message); }
+    if (rf !== undefined && !(rf && typeof rf.then === 'function')) fail(vt('v.restorefiles_resultaat') + typeof rf);
+    else if (rf) { try { await Promise.race([rf, new Promise(r => setTimeout(r, 3000))]); } catch (e) { /* zonder netwerk mag de belofte weigeren */ } }
+    fetchFileCalls = fetchBefore;
+  }
 }
 // v1.17 (§13d): klembord. clipInfo/getClip/setClip: alle drie of geen; JSON; setClip(getClip()) laat de state gelijk; rommel gooit niet en zet niets half.
 let clipOn = false, clipWarn = false, clipOutInfo, clipOutClip, clipOutMulti;

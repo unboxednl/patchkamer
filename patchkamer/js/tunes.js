@@ -86,7 +86,12 @@ function tuFillSelect(sel,groups,curPid,dirty,emptyText,usedBy){ sel.innerHTML='
     items.forEach(({l,n,path})=>{ const o=document.createElement('option'); o.value=l.lid+'|'+n.pid; const cur=curPid&&curPid===n.pid; if(cur) found=true;
       o.textContent=(path.length?path.join(tuSep)+tuSep:'')+n.name+(cur&&dirty?' *':'')+(usedBy&&usedBy(n)?' ⧉':''); g.appendChild(o); }); sel.appendChild(g); });
   return found; }
-function presetPaint(id){ const r=PK.Host.devices.get(id); if(!r||!r.pbarEl) return; const sel=r.pbarEl.querySelector('.ps'); if(!sel) return;
+// een preset of tune uit een song staat op een bibliotheek-id en pid van de computer waar hij is gemaakt; die bestaan hier niet. Dezelfde naam in een geladen bibliotheek van dit apparaat is dezelfde keuze:
+// dan is hij hier gekozen (de waarden zelf zitten al in de state van het apparaat). Wacht de bibliotheek nog op het laden, dan lukt het bij de volgende verversing (presetRefreshAll).
+function presetHeal(r){ const p=r.preset; if(!p||tuFind(p.lid,p.pid)) return; let hit=null;
+  PK.PR.libs.forEach(l=>{ if(hit||l.device!==r.def.id) return; tuWalk(l.tree,n=>{ if(!hit&&n.type==='tune'&&n.name===p.name) hit={l,n}; }); });
+  if(hit){ r.preset={lid:hit.l.lid,pid:hit.n.pid,name:hit.n.name}; r.presetSnap=presetKey(r); } }
+function presetPaint(id){ const r=PK.Host.devices.get(id); if(!r||!r.pbarEl) return; presetHeal(r); const sel=r.pbarEl.querySelector('.ps'); if(!sel) return;
   const groups=tuOptions(r,'set').map(({l,ts})=>({label:l.name+(l.ro?' (alleen-lezen)':''),items:ts.map(x=>({l,...x}))})), dirty=presetDirty(r);
   const W=PK.TW[tuTypeOf(r.def.id)]; const found=tuFillSelect(sel,groups,r.preset&&r.preset.pid,dirty,[PK.pkt('m.kies_een')+W.one+' —',PK.pkt('m.nog_geen')+W.many+' —'],n=>tuOthers(id,n.pid).length>0);
   { const h=r.preset&&tuFind(r.preset.lid,r.preset.pid); sel.title=h?PK.pkt('m.licentie',h.n.name,licLine(h.n,h.l)):''; }

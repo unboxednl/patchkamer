@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// 1.0.0 — Acoustic Drums: een gesampled akoestisch drumstel voor funk, soul en jazz (Patchkamer contract v1.35). De opnames komen via een link van internet
+// 1.1.0 — restoreFiles() (contract v1.36): na het openen van een song haalt de host de kit opnieuw op als de state `kit: true` heeft (de gebruiker had een kit geladen); dezelfde laadroutine als de knop, niets als de kit al klopt.
+// 1.0.0 — Acoustic Drums: een gesampled akoestisch drumstel voor funk, soul en jazz (Patchkamer contract v1.36). De opnames komen via een link van internet
 //         (host.fetchFile, alleen na een klik op "Kit laden"; nooit gekopieerd naar de repo) uit Virtuosity Drums (Versilian Studios, drummer Austin McMahon, CC0 1.0).
 //         Velocity-lagen met een zachte overgang tussen aangrenzende lagen, round robin zonder directe herhaling, kleine variatie in stemming en niveau, humanize,
 //         snare met automatische ghost note en rimshot, snaren aan/uit, stemming en demping, hi-hat met afkappen (geen plop), bekkens met afgrijpen, toms, kiesbare microfoons,
@@ -64,7 +65,7 @@ MICIDS.forEach((m, i) => {
   PARAMS.push(['micMix.' + m + '.pan', -1, 1, .01, 'pan', 'pan', 'mic.' + m, 'Pan', 'Pan', 0, .02, 0]);
 });
 const PMAP = Object.fromEntries(PARAMS.map(p => [p[0], p]));
-const PRESET_SKIP = ['patterns', 'pattern', 'length', 'run', 'swing'];
+const PRESET_SKIP = ['patterns', 'pattern', 'length', 'run', 'swing', 'kit'];
 const TXT = {
   nl: {
     kit: 'Kit', setLabel: 'Set', micsLabel: 'Microfoons (kiezen wat je laadt)', load: 'Kit laden', cancel: 'Annuleren', clear: 'Kit wissen',
@@ -151,7 +152,7 @@ const PORTS = { audioIn: [], audioOut: [{ id: 'mix', name: 'Stereo mix' }, { id:
 const CSS = `.ad{--accent:#e0a350;color:var(--fg,#e8e9df);background:var(--card,#14191c);padding:14px;border-radius:10px;font:13px var(--mono,'IBM Plex Mono',monospace);container-type:inline-size}.ad *{box-sizing:border-box}.ad button,.ad select{font:inherit;color:inherit;background:var(--card-2,#1e2529);border:1px solid var(--line,#364148);border-radius:5px;padding:6px 8px;min-height:30px;cursor:pointer}.ad button:hover{border-color:var(--accent)}.ad button.active{background:var(--accent);color:#14191c;border-color:var(--accent)}.ad button:disabled{opacity:.45;cursor:default}.ad .ad-sec{border:1px solid var(--line,#364148);background:var(--card-2,#1e2529);border-radius:7px;padding:11px;margin:10px 0}.ad .ad-cap{font-size:10px;letter-spacing:2px;color:var(--muted,#9aa9ad);margin-bottom:8px;text-transform:uppercase}.ad .ad-row{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:6px 0}.ad label{display:flex;flex-direction:column;gap:4px;font-size:10px;color:var(--muted,#9aa9ad)}.ad label.ad-chk{flex-direction:row;align-items:center;gap:6px;font-size:12px;color:var(--fg,#e8e9df)}.ad output{color:var(--fg,#e8e9df);font-size:12px}.ad input[type=range]{width:100%;accent-color:var(--accent);margin:2px 0}.ad .ad-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.ad .ad-note{color:var(--muted,#9aa9ad);font-size:11px;line-height:1.4}.ad .ad-warn{color:var(--accent);font-size:12px;margin:6px 0}.ad .ad-err{color:var(--stop,#ff9386);font-size:12px}.ad progress{width:100%;height:10px;accent-color:var(--accent)}.ad .ad-lane{display:grid;gap:3px;align-items:center;margin:3px 0}.ad .ad-lane .ad-nm{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:left;font-size:11px}.ad .ad-step{min-height:24px;padding:0;border-radius:3px;background:var(--well,#273036)}.ad .ad-step.ad-q{border-left:2px solid var(--muted,#9aa9ad)}.ad .ad-step.ad-l1{background:#7a5a2c}.ad .ad-step.ad-l2{background:#b9822f}.ad .ad-step.ad-l3{background:var(--accent)}.ad .ad-step.ad-now{outline:2px solid var(--fg,#e8e9df);outline-offset:1px}.ad .ad-pads{display:flex;flex-wrap:wrap;gap:5px}.ad .ad-pads button{font-size:11px}.ad .ad-pads small{color:var(--muted,#9aa9ad);margin-left:4px}.ad .ad-mic{display:grid;grid-template-columns:minmax(90px,1fr) 2fr 2fr;gap:8px;align-items:center;margin:4px 0}`;
 
 const __pkDef = {
-  id: 'nl.patchkamer.acousticdrums', name: 'Acoustic Drums', version: '1.0.0', kind: 'instrument', category: 'groove',
+  id: 'nl.patchkamer.acousticdrums', name: 'Acoustic Drums', version: '1.1.0', kind: 'instrument', category: 'groove',
   about: { nl: ABOUT.nl, en: ABOUT.en }, modExclude: [], ui: { width: 980, minWidth: 480 }, ports: PORTS,
   i18n: { en: { ports: { mix: 'Stereo mix', cymbals: 'Cymbals', room: 'Room mic', multi: 'Separate outs (bundle)' } } },
   create(ctx, host) {
@@ -163,7 +164,7 @@ const __pkDef = {
     const quantumStart = x => Math.ceil(x * ctx.sampleRate / 128 - 1e-6) * 128 / ctx.sampleRate;
     // ---- state ----
     function defaults() {
-      const s = { set: 'funk', mics: ['mid'], master: .8, levels: {}, micMix: {}, snares: true, run: false, pattern: 0, length: 16, patterns: [] };
+      const s = { set: 'funk', mics: ['mid'], kit: false, master: .8, levels: {}, micMix: {}, snares: true, run: false, pattern: 0, length: 16, patterns: [] };
       for (const p of PARAMS) { const ks = p[0].split('.'); if (ks.length === 1) s[p[0]] = p[9]; else { s[ks[0]] = s[ks[0]] || {}; let o = s[ks[0]]; for (let i = 1; i < ks.length - 1; i++) o = o[ks[i]] = o[ks[i]] || {}; o[ks[ks.length - 1]] = p[9]; } }
       for (let p = 0; p < 4; p++) s.patterns.push(LANES.map(() => new Array(32).fill(0)));
       const A = s.patterns[0], put = (lane, st, v) => st.forEach(k => { A[lane][k] = v; });
@@ -175,7 +176,7 @@ const __pkDef = {
     function clean(s) {
       const d = defaults(), o = isObj(s) ? s : {}, st = defaults();
       st.set = typeof o.set === 'string' && Object.hasOwn(SETS, o.set) ? o.set : d.set;
-      const m = Array.isArray(o.mics) ? MICIDS.filter(x => o.mics.includes(x)) : []; st.mics = m.length ? m : d.mics;
+      const m = Array.isArray(o.mics) ? MICIDS.filter(x => o.mics.includes(x)) : []; st.mics = m.length ? m : d.mics; st.kit = typeof o.kit === 'boolean' ? o.kit : d.kit;
       for (const p of PARAMS) setPath(st, p[0], num(getPath(o, p[0]), p[1], p[2], p[9]));
       st.snares = typeof o.snares === 'boolean' ? o.snares : d.snares;
       st.run = typeof o.run === 'boolean' ? o.run : d.run;
@@ -393,12 +394,20 @@ const __pkDef = {
       if (!ok) { status = T.failAll(J.fail.length ? errText(J.fail[0]) : T.errOther); statusErr = true; paintKit(); return; }
       for (const k of Object.keys(lib)) { lib[k].layers.sort((a, b) => a.c - b.c); lib[k].layers.forEach(L => L.rrs.sort((a, b) => a.rr - b.rr)); }
       normalise(lib); stopAll(.05); for (const k of Object.keys(last)) delete last[k];
-      kit = { lib, setId, mics, files: ok, bytes: J.bytes, dec };
+      kit = { lib, setId, mics, files: ok, bytes: J.bytes, dec }; state.kit = true;
       status = J.fail.length ? T.partial(ok, J.fail.length, errText(J.fail[0])) : T.loaded(ok, mbOf(J.bytes), mbOf(dec)); statusErr = J.fail.length > 0;
       paintKit();
     }
+    // v1.36: door de host aangeroepen na het openen van een song; alleen als de state een kit wil (kit: true) en die er nog niet (of een andere) is
+    async function restoreFiles() {
+      try {
+        if (dead || job || !state.kit || !canNet()) return;
+        if (kit && kit.setId === state.set && kit.mics.length === state.mics.length && state.mics.every(m => kit.mics.includes(m))) return;
+        await loadKit();
+      } catch (e) { status = errText(e); statusErr = true; try { paintKit(); } catch (e2) { /* */ } }
+    }
     function cancelLoad() { if (job) job.ctl.abort(); }
-    function clearKit() { if (job) return; stopAll(.05); kit = null; status = T.cleared; statusErr = false; paintKit(); }
+    function clearKit() { if (job) return; stopAll(.05); kit = null; state.kit = false; status = T.cleared; statusErr = false; paintKit(); }
     // ---- UI ----
     let ui = {};
     const pname = p => (host && host.lang === 'nl' ? p[7] : p[8]);
@@ -557,6 +566,7 @@ const __pkDef = {
         } catch (e) { error = T.audioErr + (e && e.message || String(e)); }
       },
       clipInfo, getClip, setClip, noteNames() { return SND.map((s, i) => ({ note: s[1], name: nm(i) })); },
+      restoreFiles,
       getState() { return copy(state); },
       setState(s) { state = clean(s); apply(); if (root) render(); },
       destroy() { if (dead) return; if (job) job.ctl.abort(); dead = true; if (stopDraw) { stopDraw(); stopDraw = null; } root = null; voices.forEach(v => v.srcs.forEach(s => { try { s.stop(); } catch (e) { /* */ } })); voices.clear(); owned.forEach(n => { try { n.disconnect(); } catch (e) { /* */ } }); owned.clear(); kit = null; }

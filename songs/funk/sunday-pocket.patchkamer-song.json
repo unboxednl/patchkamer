@@ -101420,7 +101420,8 @@
      "hatFade": 0.1,
      "human": 0.003,
      "variation": 1,
-     "swing": 0
+     "swing": 0,
+     "kit": true
     }
    },
    {
