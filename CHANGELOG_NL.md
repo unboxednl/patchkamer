@@ -4,6 +4,15 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.49.0 (2026-11-14)
+
+### Toegevoegd
+- **Clip Arranger 1.39.0: song afspelen en stoppen.** In de songbalk staan **▶ Speel song** en **■ Stop**. Staat de klok van de pagina stil, dan loopt de eigen klok van de Clip Arranger (zoals bij Speel deze clip); **Speel vanaf sectie** start nu ook zo.
+- **Klik op een sectie tijdens het afspelen** springt erheen: in **Song** op de volgende maat, waarna de song verder gaat met de volgende secties; in **Clips / scènes** loopt de scène van die sectie. Een wachtende sprong heeft een gestippelde rand.
+
+### Getest (headless Chromium, Stadium Daybreak; niet beluisterd)
+- Song afspelen met stilstaande klok, klik op sectie 4 (springt, daarna loopt de song door), Stop, Speel vanaf sectie 3, en in Clips / scènes sectie 5 (scène 5 loopt): zonder paginafouten, in Nederlands en Engels. Ook met de klok van de pagina aan (host-transport): klikken op een sectie springt en de song loopt door.
+
 ## 0.48.1 (2026-11-14)
 
 ### Opgelost

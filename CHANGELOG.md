@@ -4,6 +4,15 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.49.0 (2026-11-14)
+
+### Added
+- **Clip Arranger 1.39.0: play and stop a song.** The song bar has **▶ Play song** and **■ Stop**. If the page clock is stopped, the Clip Arranger's own clock runs (as with Play this clip); **Play from section** now starts that way too.
+- **Clicking a section while playing** jumps there: in **Song** at the next bar, after which the song continues with the following sections; in **Clips / scenes** the scene of that section loops. A pending jump has a dashed outline.
+
+### Tested (headless Chromium, Stadium Daybreak; not listened to)
+- Playing a song with the clock stopped, clicking section 4 (jumps, then the song carries on), Stop, Play from section 3, and in Clips / scenes section 5 (scene 5 loops): no page errors, in Dutch and English. Also with the page clock running (host transport): clicking a section jumps and the song carries on.
+
 ## 0.48.1 (2026-11-14)
 
 ### Fixed
