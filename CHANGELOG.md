@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.42.0 (2026-11-13)
+
+### Added
+- **Sax Studio 1.1.0**: new control **Rasp** (default 0.4) for a slightly rough, raspy saxophone sound. Band-limited noise modulates the amplitude of the whole sound, so a light roughness sounds around the harmonics, only while the note sounds. Measured with the alto (note 62): noise between the harmonics -24 dB at 0, -20 at 0.3, -15 at 0.6, -11 at 1; the bands above 3 kHz do not change. The original recordings are very clean (-26 to -33 dB). With 0 the sound is as in 1.0.0; the 36 tunes now have the default 0.4. Not listened to.
+
 ## 0.41.0 (2026-11-13)
 
 ### Added

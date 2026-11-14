@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.42.0 (2026-11-13)
+
+### Toegevoegd
+- **Sax Studio 1.1.0**: nieuwe regelaar **Schuren** (standaard 0,4) voor een licht ruwe, schurende saxofoonklank. Bandbegrensde ruis moduleert de amplitude van de hele klank, zodat er rond de harmonischen een lichte ruwheid klinkt, alleen zolang de noot klinkt. Gemeten bij de alt (noot 62): ruis tussen de harmonischen -24 dB bij 0, -20 bij 0,3, -15 bij 0,6, -11 bij 1; de banden boven 3 kHz veranderen niet. De originele opnames zijn erg schoon (-26 tot -33 dB). Met 0 klinkt het als in 1.0.0; de 36 tunes krijgen nu de standaardwaarde 0,4. Niet beluisterd.
+
 ## 0.41.0 (2026-11-13)
 
 ### Toegevoegd

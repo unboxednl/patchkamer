@@ -12,7 +12,7 @@ Gesampelde saxofoons (sopraan, alto, tenor, bariton) voor gebruik met een sequen
 | `id` | `nl.patchkamer.saxstudio`. Verander die nooit |
 | Soort | `instrument`: dit apparaat krijgt **tunes** (geen presets), categorie `synth` |
 | Poorten | eventingang `notes` (noten, ook `noteon`/`noteoff`, cc, `panic`), sturing in `mod`, audio uit `out` (stereo). Geen bundel, geen losse uitgangen |
-| Contract | v1.35 (apparaatversie 1.0.0; gebruikt het optionele `host.fetchFile` van v1.30) |
+| Contract | v1.35 (apparaatversie 1.1.0; gebruikt het optionele `host.fetchFile` van v1.30) |
 | Licentie apparaat | AGPL-3.0-or-later |
 | Skin | `../../../skins/library/nl.patchkamer.saxstudio/compact.patchkamer-skin.json` (Compact) |
 
@@ -66,6 +66,7 @@ Compact is de helft van de noten (om de andere opname, de hoogste en de laagste 
 | `growlRate` | Growl-snelheid / Growl rate | 30 … 110 (Hz) | 62 | Snelheid van de growl |
 | `fall` | Falloff / Falloff | 0 … 1 | 0 | Hoeveelheid falloff (toonhoogte zakt na het einde); 0 = uit |
 | `scoop` | Scoop / Scoop | 0 … 1 | 0 | Hoeveelheid scoop (toonhoogte komt van onderen); 0 = uit |
+| `rasp` | Schuren / Rasp | 0 … 1 | 0,4 | Ruwheid in de klank (versie 1.1.0); 0 = zoals 1.0.0. Werkt direct, ook via de mod-ingang |
 | `vib` | Vibrato / Vibrato | 0 … 80 (cent) | 10 | Vibratodiepte (werkt direct); 0 = uit |
 | `vibRate` | Vibrato-snelheid / Vibrato rate | 3 … 9 (Hz) | 5,2 | Vibratosnelheid (werkt direct) |
 | `vibDelay` | Vibrato-vertraging / Vibrato delay | 0 … 1,5 (s) | 0,35 | Vertraging voor het vibrato inzet |
@@ -110,6 +111,7 @@ Alle regelaars hebben een `id` (= de state-sleutel), `role` `param` (knoppen) en
 - **Laag en niveau.** Velocity boven 100/127 kiest de forte-laag (bariton: p tot 85, m tot 106, f daarboven), eronder de zachte laag; er is bewust **geen** overvloeien tussen lagen (twee lagen van dezelfde toonhoogte tegelijk gaven bij een lange noot een zwevingsfout tot 5 dB; gemeten). Het niveau volgt `dyn` (tot 24 dB), per opname gelijkgetrokken (90% van het verschil met de mediaan van de laag, hoogstens 6 dB) en per instrument bijgesteld (`INST_DB`).
 - **Subtone** (velocity onder `subthr`): donkerder (laagdoorlaat van 14 kHz naar 1,7 kHz bij velocity 0), langzamere aanzet (tot 75 ms), meer adem, 2 dB zachter en 8 cent lager. **Bite** (velocity vanaf `acc`, schaal `tongue`): aanzetpiek tot +3,5 dB (daalt in 0,09 s) en een peakfilter van 2,8 kHz tot +7 dB (daalt in 0,14 s), aanzet 4 ms. **Staccato** (`dur` < `stac`): de noot duurt 75% van `dur` en klinkt in 30 ms uit.
 - **Mono-legato.** Begint een noot voordat de vorige afloopt, of binnen `legato` ms daarna (en niet staccato, en hoogstens 9 halve tonen verderop), dan vloeit de vorige stem in `glide` ms (gelijk vermogen) uit en begint de nieuwe 0,28 s verderop in de opname (dus zonder aanzet en zonder ademruis), met een klepklik. Dezelfde toon in elkaar over (overlap) is een bindboog: de vorige stem loopt gewoon door. De overgang heeft bewust geen toonhoogteglijding: tijdens het overvloeien zijn beide stemmen dan op dezelfde toon en kunnen ze elkaar uitdoven (gemeten tot −8,6 dB; zonder glijding in de metingen hieronder hoogstens −2,8 dB).
+- **Schuren** (`rasp`): één gedeelde bandbegrensde ruis (3 s, vaste zaadwaarde, in een lus; bandfilter 450 Hz Q 0,5 en laagdoorlaat 1,8 kHz) stuurt de versterking van de hele klank vóór de EQ (gain = 1 + 0,8 × `rasp` × ruis). Zo ontstaat er ruis rond elke harmonische die met de toon meeklinkt en met de toon stopt; de banden boven 3 kHz veranderen niet. Gemeten (alt, noot 62, velocity 0,6): ruis tussen de harmonischen -24,3 dB (0), -19,8 (0,3), -15,0 (0,6), -11,3 (1); de bronopname zelf zit op -26 tot -33 dB, dus schoon. Niet beluisterd.
 - **Growl**: amplitudemodulatie (driehoek, `growlRate`, diepte 0,25 + 0,7 × `growl`), bij lange noten loopt de diepte in 0,5 s op. **Falloff**: na het einde zakt de toonhoogte 3 tot 12 halve tonen in 0,12 tot 0,4 s terwijl het filter dichtgaat; de uitklinktijd past zich aan. **Scoop**: de noot begint 1,5 tot 4 halve tonen te laag en stijgt in 60 tot 130 ms.
 - **Vibrato**: één gedeelde LFO (sinus) in cents op de `detune` van elke stem, per stem met vertraging (`vibDelay`, daarna 0,45 s oplopend); bij legato loopt het vibrato door. De mod-ingang kan diepte en snelheid sturen.
 - **Adem en klep**: een willekeurige opname uit de geladen adem- en klepopnames; adem bij de aanzet (meer bij zachte noten), klik bij het einde van een noot en bij een legato-overgang (de klik van een noot die door legato doorloopt wordt geannuleerd).

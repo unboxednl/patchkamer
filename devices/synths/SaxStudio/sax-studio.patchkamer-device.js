@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Nieuwe regelaar Schuren (rasp, standaard 0,4): bandbegrensde ruis moduleert de amplitude van de klank, zodat er rond de harmonischen een lichte ruwheid ontstaat die met de toon meeklinkt en stopt; 0 = zoals 1.0.0. Gemeten bij alt, noot 62: ruis tussen de harmonischen -24 dB (0), -20 (0,3), -15 (0,6), -11 (1); de banden boven 3 kHz veranderen niet. Niet beluisterd.
 // 1.0.0 — Sax Studio: gesampelde saxofoons (sopraan, alto, tenor, bariton) voor sequencers (Patchkamer contract v1.35).
 //         De opnames zitten NIET in de repo en niet in Patchkamer: het apparaat haalt ze na een klik op "Laden" via host.fetchFile (contract §13i) op uit
 //         MTG Solo Saxophones (MTG, Universitat Pompeu Fabra, via freesound.org; gesneden, gelooped en in SFZ gezet door kinwie; CC BY 4.0).
@@ -37,6 +38,7 @@ const NUM = [
   ['growlRate', 30, 110, 1, 62, 'Hz', 'fx', 'Growl-snelheid', 'Growl rate', 'lin', 0],
   ['fall', 0, 1, .01, 0, '%', 'fx', 'Falloff', 'Falloff', 'lin', 1],
   ['scoop', 0, 1, .01, 0, '%', 'fx', 'Scoop', 'Scoop', 'lin', 1],
+  ['rasp', 0, 1, .01, .4, '%', 'fx', 'Schuren', 'Rasp', 'lin', 1],
   ['vib', 0, 80, 1, 10, 'ct', 'fx', 'Vibrato', 'Vibrato', 'lin', 1],
   ['vibRate', 3, 9, .1, 5.2, 'Hz', 'fx', 'Vibrato-snelheid', 'Vibrato rate', 'lin', 1],
   ['vibDelay', 0, 1.5, .01, .35, 's', 'fx', 'Vibrato-vertraging', 'Vibrato delay', 'lin', 0],
@@ -162,6 +164,14 @@ function flacLoop(ab) {
     return rate && loop && loop.le > loop.ls ? { rate, ls: loop.ls, le: loop.le } : null;
   } catch (e) { return null; }
 }
+// ruis voor het schuren: 3 s wit (vaste zaadwaarde, dus elke keer gelijk), in een lus
+const RASP_HZ = 450, RASP_DEPTH = .8;
+function makeRaspNoise(ctx) {
+  const n = Math.round(ctx.sampleRate * 3), b = ctx.createBuffer(1, n, ctx.sampleRate), d = b.getChannelData(0); let z = 0x9e3779b9;
+  for (let i = 0; i < n; i++) { z = (Math.imul(z ^ (z >>> 15), 2246822507) + 0x6d2b79f5) | 0; d[i] = ((z >>> 8) / 8388608) - 1; }
+  const fade = Math.round(ctx.sampleRate * .02); for (let i = 0; i < fade; i++) { const w = i / fade; d[n - fade + i] = d[n - fade + i] * (1 - w) + d[i] * w; }
+  return b;
+}
 // stille, deterministische ruimte-impuls (stereo)
 function makeIR(ctx, type) {
   const R = ROOMS[type], sr = ctx.sampleRate, n = Math.max(64, Math.floor(R.len * sr)), buf = ctx.createBuffer(2, n, sr);
@@ -210,7 +220,7 @@ a{color:var(--au)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}`;
 
 export default {
-  id: 'nl.patchkamer.saxstudio', name: 'Sax Studio', version: '1.0.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.saxstudio', name: 'Sax Studio', version: '1.1.0', kind: 'instrument', category: 'synth',
   ui: { width: 760, minWidth: 320 },
   about: { nl: ABOUT.nl, en: ABOUT.en },
   modExclude: MODEX,
@@ -240,6 +250,10 @@ export default {
     const os = host && host.audio && host.audio.oversample === 'none' ? 'none' : host && host.audio && host.audio.oversample === '4x' ? '4x' : '2x';
     const sat = own(ctx.createWaveShaper()); sat.curve = SAT_CURVE; sat.oversample = os;
     const dryG = gain(), satG = gain();
+    // schuren (rasp): bandbegrensde ruis moduleert de amplitude van de hele klank (gain = 1 + diepte × ruis); zo zit er alleen ruis rond de harmonischen waar de toon klinkt en stopt het met de toon
+    const raspG = gain(), raspD = gain(), raspBP = own(ctx.createBiquadFilter()), raspSrc = own(ctx.createBufferSource()), raspLP = own(ctx.createBiquadFilter());
+    raspLP.type = 'lowpass'; raspLP.frequency.value = 1800; raspLP.Q.value = .7; raspG.gain.value = 1; raspD.gain.value = 0; raspBP.type = 'bandpass'; raspBP.frequency.value = RASP_HZ; raspBP.Q.value = .5;
+    raspSrc.buffer = makeRaspNoise(ctx); raspSrc.loop = true; raspSrc.connect(raspBP); raspBP.connect(raspLP); raspLP.connect(raspD); raspD.connect(raspG.gain);
     let hpF, lowS, pk, hiS, lpF;
     function buildChain() {
       [hpF, lowS, pk, hiS, lpF].forEach(n => { if (n) { try { n.disconnect(); } catch (e) { /* los */ } owned.delete(n); } });
@@ -249,7 +263,8 @@ export default {
       pk = own(ctx.createBiquadFilter()); pk.type = 'peaking'; pk.frequency.value = 2600; pk.Q.value = .8;
       hiS = own(ctx.createBiquadFilter()); hiS.type = 'highshelf'; hiS.frequency.value = 6500;
       lpF = own(ctx.createBiquadFilter()); lpF.type = 'lowpass'; lpF.Q.value = .5;
-      bus.connect(hpF); hpF.connect(lowS); lowS.connect(pk); pk.connect(hiS); hiS.connect(lpF);
+      try { raspG.disconnect(); } catch (e) { /* los */ }
+      bus.connect(raspG); raspG.connect(hpF); hpF.connect(lowS); lowS.connect(pk); pk.connect(hiS); hiS.connect(lpF);
       lpF.connect(dryG); lpF.connect(sat); sat.connect(satG);
       applyNow();
     }
@@ -273,12 +288,14 @@ export default {
       S(hpF.frequency, e.hp); S(lowS.gain, e.body); S(pk.gain, e.presence); S(hiS.gain, e.air); S(lpF.frequency, e.lp);
       S(dryG.gain, 1 - e.drive * .75); S(satG.gain, e.drive * .55);
       S(expG.gain, Math.pow(e.expr, 1.6)); S(lvl.gain, e.level * 2.2);
+      S(raspD.gain, e.rasp * RASP_DEPTH);
       S(vibAmp.gain, e.vib); S(vibLfo.frequency, e.vibRate, .1);
       setRoom(state.room, e.roomMix, now);
     }
     const apply = () => { try { applyNow(); } catch (e) { error = T.audioErr + (e && e.message || String(e)); } };
     buildChain();
     try { vibLfo.start(); } catch (e) { /* al gestart */ }
+    try { raspSrc.start(); } catch (e) { /* al gestart */ }
 
     // ---- bewaker: één niet-eindig sample stopt alles en bouwt het filterspoor opnieuw op ----
     function guard(force) {
