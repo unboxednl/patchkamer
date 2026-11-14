@@ -228,6 +228,10 @@ You save the settings as a **preset**.
 - **Per track:** a red button (arm: record on this track or not), a name field (becomes the file name), a list for the source (a channel of the bundle, or **— none**) and a level meter.
 - After a take, a list shows your takes. **Save all (.zip)** saves one stereo WAV per track in a single zip. **Per track** saves single tracks. A **×** discards a take to free memory.
 
+- **Fast record** (the button next to **Start** in the top bar) records the whole song into Multitrack without sound and faster than real time. See *Record without sound* below.
+
+**Record without sound.** Press **Fast record**, fill in the length of the recording (m:ss) and, if you like, after how long the song itself stops (the rest is for reverb and ringing notes). Patchkamer then plays the song in a hidden copy of itself, at roughly one and a half times real time or faster, depending on the setup. You hear nothing and can keep working on the page. When it is done the take is in the list, like a live take. Rules: stop the clock first, the Multitrack needs a source on its tracks, and nothing from the hidden copy is saved (your workspaces stay as they are). Devices with a free-running modulation, such as a chorus, start that modulation at the same point every time, so the take does not sound identical to a live take, but it is the same every time you repeat it. Inputs from outside (a microphone, MIDI, Audio Capture) are not played.
+
 **Ports.** One bundle in, **Bundle** (the thick green cable). No audio, events or modulation. Multitrack only listens; it does not pass the sound on.
 
 **Example patch.** Connect the green bundle out (**Channels out**) of the Mixer to **Bundle** of Multitrack. Leave **ASSIGN NEW CHANNELS AUTOMATICALLY** on: the Mixer channels appear on the tracks. Press **● RECORD**, play, press **■ Stop** and then **Save all (.zip)**.

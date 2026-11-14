@@ -18,6 +18,18 @@ Een meersporenrecorder: neemt tot 16 sporen tegelijk op, sample-gelijk, als ster
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand (`multitrack_v1.8.0.js`, versie 1.8.0). De `id` is hetzelfde gebleven.
 
+## Snel opnemen (offline, voor de host)
+
+Sinds versie 1.12.0 biedt Multitrack drie methoden voor de host-functie **Snel opnemen** (`patchkamer/js/render.js`; de knop naast Start). De host zet de werkruimte in een verborgen kopie op een `OfflineAudioContext` met een virtuele klok en laat het lied sneller dan realtime lopen. Dit zijn geen contractonderdelen maar methoden die de host op naam opzoekt; een ander opnemend apparaat mag ze ook aanbieden:
+
+| Methode | Doet |
+|---|---|
+| `offlineRecord({at, frames})` → Promise | Neemt precies `frames` frames op vanaf audiotijd `at`; de worklet stopt zelf. Geeft `true` als hij klaar staat |
+| `offlineTake()` → Promise | De take zodra hij af is: `{frames, sr, tracks:[{i, name, from, L: Float32Array, R: Float32Array}]}`, of `null` |
+| `offlineAdd(take)` | Zet zo'n take in de takelijst (in de gewone host, de kopie stuurt hem door) |
+
+Regels voor het apparaat: de opname mag niet van `performance.now`, `setTimeout` of de wandklok afhangen (die lopen in de kopie mee met de audiotijd, maar de worklet telt frames); een nieuwe worklet krijgt een nieuwe naam.
+
 ## Geen tunes, wel presets
 
 Alleen apparaten met `kind: 'instrument'` hebben tunes. Multitrack is een `utility`, dus het krijgt **presets** en **nooit tunes** (contract §0 en §13c). Maak voor Multitrack geen pack in `../../../tunes/`. Een presetpack heet `naam.patchkamer-presets.json` en staat in `../../../presets/`; het formaat is dat van het contract (§13c), `formatVersion` 2, licentie `CC0-1.0`, `device` is altijd `nl.patchkamer.multitrack` en elke preset is `kind: "set"`. Maak alleen presets als de opdracht dat vraagt.

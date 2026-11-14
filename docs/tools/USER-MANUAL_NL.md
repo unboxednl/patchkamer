@@ -228,6 +228,10 @@ De instellingen bewaar je als **preset**.
 - **Per spoor:** een rode knop (arm: wel of niet opnemen op dit spoor), een naamveld (wordt de bestandsnaam), een lijst voor de bron (een kanaal van de bundel, of **— geen**) en een niveaumeter.
 - Na een take toont een lijst je takes. **Bewaar alles (.zip)** bewaart een stereo-WAV per spoor in één zip. **Per spoor** bewaart losse sporen. Met een **×** gooi je een take weg om geheugen vrij te maken.
 
+- **Snel opnemen** (de knop naast **Start** in de bovenbalk) neemt het hele lied zonder geluid en sneller dan realtime op in de Multitrack. Zie *Opnemen zonder geluid* hieronder.
+
+**Opnemen zonder geluid.** Druk op **Snel opnemen**, vul de lengte van de opname in (m:ss) en eventueel na hoe lang het lied zelf stopt (de rest is voor galm en uitklinkende noten). Patchkamer speelt het lied dan in een onzichtbare kopie van zichzelf, op ongeveer anderhalf keer realtime of sneller, afhankelijk van de opstelling. Je hoort niets en kunt op de pagina verder werken. Is het klaar, dan staat de take in de lijst, net als een live take. Regels: stop eerst de klok, de Multitrack heeft een bron op zijn sporen nodig, en niets uit de onzichtbare kopie wordt bewaard (je werkruimten blijven zoals ze zijn). Apparaten met een vrij lopende modulatie, zoals een chorus, beginnen die elke keer op hetzelfde punt, waardoor de take niet identiek klinkt aan een live take, maar bij elke herhaling wel hetzelfde is. Ingangen van buiten (een microfoon, MIDI, Audio Capture) worden niet afgespeeld.
+
 **Poorten.** Eén bundelingang, **Bundel** (de dikke groene kabel). Geen audio, events of modulatie. Multitrack luistert alleen mee; hij geeft het geluid niet door.
 
 **Voorbeeldpatch.** Verbind de groene bundeluitgang (**Kanalen uit**) van de Mixer met **Bundel** van Multitrack. Laat **NIEUWE KANALEN VANZELF TOEWIJZEN** aan: de Mixer-kanalen komen op de sporen. Druk op **● OPNEMEN**, speel, druk op **■ Stop** en daarna op **Bewaar alles (.zip)**.

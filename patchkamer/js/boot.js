@@ -265,7 +265,8 @@ PK.WSL={ready:false,busy:false,cur:0,slots:[]};
 document.addEventListener('keydown',e=>{ if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||!PK.WSL.ready) return; const m=/^F(\d{1,2})$/.exec(e.key); if(!m) return; const n=+m[1]; if(n<1||n>PK.WSL.slots.length) return;
   e.preventDefault(); if(document.querySelector('.pkmodal')) return; PK.wslSwitch(n-1); });
 setInterval(PK.wslSave,15000); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') PK.wslSave(); }); window.addEventListener('pagehide',()=>{ PK.wslSave(); });
-PK.paintSources(); (async()=>{ const SP=PK.startupBegin();   // het startscherm met voortgang (js/startup.js)
+PK.paintSources(); if(!window.__PK_RENDER) (async()=>{ const SP=PK.startupBegin();   // in de verborgen kopie van Snel opnemen (js/render.js) laadt niets vanzelf: de werkruimte komt van de host
+    // het startscherm met voortgang (js/startup.js)
   await SP.each(PK.SOURCES,2,async src=>{ SP.src(src); try{ await PK.loadSource(src,{interactive:false}); if(src.kind==='folder'){ const sg=await PK.folderSig(src); if(sg) PK.FOLDERSIG.set(src.sid,sg); } }catch(e){ SP.warn(); } SP.srcEnd(src); });   // twee bronnen tegelijk
   await PK.wslInit({none:()=>SP.noWs(),auto:()=>SP.auto(),always:PK.WSA_START.always,ws:()=>{ SP.step(PK.pkt('m.su_werkruimte'),'ws'); return SP.paintNow(); }}); await SP.settle(); SP.finish(); })();
 PK.paintPatches();

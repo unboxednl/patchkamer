@@ -41,6 +41,7 @@
   <input class="wsname" id="wsName" value="Naamloos" maxlength="60" spellcheck="false" aria-label="naam van je compositie" title="naam van je compositie" data-i18n-title="attr.naam_van_je_compositie" data-i18n-aria="attr.naam_van_je_compositie">
   <div class="transport">
     <button class="go" id="play" data-i18n="ui.start">Start</button>
+    <button class="small" id="renderBtn" type="button" data-i18n="ui.snel_opnemen" data-i18n-title="attr.snel_opnemen">Snel opnemen</button>
     <button class="loadlamp" id="loadLamp" type="button" hidden data-i18n-title="attr.belasting_lamp" title="de audiodraad haalt het niet"></button>
     <button class="reclamp" id="recLamp" type="button" hidden><i aria-hidden="true"></i><span class="t">00:00</span></button>
     <span class="tp tpbpm"><span data-i18n="ui.bpm">BPM</span> <input type="number" id="bpm" min="40" max="200" value="126"></span>
@@ -243,6 +244,7 @@
   </section>
 </div>
 
+<script src="js/render-boot.js"></script>
 <script src="js/ns-open.js"></script>
 <script src="i18n/nl.js"></script>
 <script src="i18n/en.js"></script>
@@ -327,4 +329,5 @@
 <script src="js/skin-editor.js"></script>
 <script src="js/library-tabs.js"></script>
 <script src="js/boot.js"></script>
+<script src="js/render.js"></script>
 <script src="js/ns-close.js"></script>

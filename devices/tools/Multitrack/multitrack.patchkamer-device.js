@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Snel opnemen: drie methoden voor de host (offlineRecord, offlineTake, offlineAdd) waarmee de host het lied in een verborgen kopie op een OfflineAudioContext
+//          opneemt, sneller dan realtime en zonder geluid, en de take in dit apparaat zet. De worklet kan nu een exact aantal frames opnemen en stopt dan zelf
+//          (worklet-naam nl-patchkamer-multitrack-1-12-0). Snel opnemen slaat gearmde sporen zonder bron over. Live opnemen, WAV en zip zijn ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poortnaam per taal in i18n). Tekenen via host.frame (de tekenpoort-omzetting is weg).
 //          setState volgt §13: onbekende velden weg, getallen binnen hun bereik, ongeldige waarden de standaard; een preset houdt de bronkeuzes van de sporen.
 //          De standaardnaam van de sessie is nu taalneutraal (Session). De opname (worklet), de WAV- en de zip-uitvoer zijn ongewijzigd.
@@ -23,7 +26,7 @@ class PkMultitrack extends AudioWorkletProcessor {
     super(); this.n = o.processorOptions.n; this.blk = 8192; this.rec = false; this.pending = false; this.at = 0; this.mask = [];
     this.pk = new Float32Array(this.n); this.pkAt = 0; this.alloc();
     this.port.onmessage = e => { const d = e.data;
-      if (d.cmd === 'start') { this.mask = d.mask; this.at = d.at || 0; this.pending = true; this.rec = false; this.frames = 0; this.alloc(); }
+      if (d.cmd === 'start') { this.mask = d.mask; this.at = d.at || 0; this.lim = d.frames > 0 ? Math.round(d.frames) : 0; this.pending = true; this.rec = false; this.frames = 0; this.alloc(); }
       else if (d.cmd === 'stop') { if (this.rec || this.pending) { this.flush(); this.port.postMessage({ done: true, frames: this.frames || 0 }); } this.rec = false; this.pending = false; } };
   }
   alloc() { this.L = []; this.R = []; for (let i = 0; i < this.n; i++) { this.L.push(this.mask[i] ? new Float32Array(this.blk) : null); this.R.push(this.mask[i] ? new Float32Array(this.blk) : null); } this.pos = 0; }
@@ -41,12 +44,13 @@ class PkMultitrack extends AudioWorkletProcessor {
     for (let k = start; k < q; k++) {
       for (let i = 0; i < this.n; i++) { const B = this.L[i]; if (!B) continue; const inp = inputs[i], l = inp && inp[0], r = inp && (inp[1] || inp[0]); B[this.pos] = l ? l[k] : 0; this.R[i][this.pos] = r ? r[k] : 0; }
       this.pos++; this.frames++; if (this.pos === this.blk) this.flush();
+      if (this.lim && this.frames >= this.lim) { this.flush(); this.port.postMessage({ done: true, frames: this.frames }); this.rec = false; this.lim = 0; break; }
     }
     return true;
   }
 }
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-registerProcessor('pk-multitrack', PkMultitrack);`;
+registerProcessor('nl-patchkamer-multitrack-1-12-0', PkMultitrack);`;
 
 // ---------- WAV ----------
 function wavBlob(Ls, Rs, frames, sr, bits) {
@@ -162,7 +166,7 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: 'nl.patchkamer.multitrack',
   name: 'Multitrack',
-  version: '1.11.0',
+  version: '1.12.0',
   kind: 'utility',
   category: 'tool',
   ui: { width: 560, minWidth: 380 },
@@ -178,16 +182,16 @@ export default {
     const srcNode = new Array(MAXTR).fill(null);
     const bundles = new Map();   // sleutel -> bundel
     let node = null, ready = null, rec = null, takes = [], nTake = 0, el = null, f = {}, stopDraw = null, dead = false, pk = new Array(MAXTR).fill(0), hold = new Array(MAXTR).fill(0), clipT = new Array(MAXTR).fill(0);
-    let self;
+    let self, offRes = null, offDone = null;
 
     // ---------- worklet ----------
     function ensureNode() {
       if (ready) return ready;
-      const load = host.loadWorklet ? host.loadWorklet('pk-multitrack', WORKLET)
+      const load = host.loadWorklet ? host.loadWorklet('nl-patchkamer-multitrack-1-12-0', WORKLET)
         : ctx.audioWorklet.addModule(URL.createObjectURL(new Blob([WORKLET], { type: 'text/javascript' })));
       ready = Promise.resolve(load).then(() => {
         if (dead) return null;
-        node = new AudioWorkletNode(ctx, 'pk-multitrack', { numberOfInputs: MAXTR, numberOfOutputs: 0, channelCount: 2, channelCountMode: 'explicit', channelInterpretation: 'speakers', processorOptions: { n: MAXTR } });
+        node = new AudioWorkletNode(ctx, 'nl-patchkamer-multitrack-1-12-0', { numberOfInputs: MAXTR, numberOfOutputs: 0, channelCount: 2, channelCountMode: 'explicit', channelInterpretation: 'speakers', processorOptions: { n: MAXTR } });
         node.port.onmessage = onMsg; tin.forEach((g, i) => g.connect(node, 0, i)); return node;
       });
       ready.catch(e => { ready = null; msg(T.noRec + e.message); });
@@ -223,15 +227,15 @@ export default {
     }
 
     // ---------- opnemen ----------
-    function start(at) {
-      if (rec || dead) return;
-      ensureNode().then(n => {
-        if (!n || rec) return;
-        const mask = Array.from({ length: MAXTR }, (_, i) => i < S.nTr && S.tr[i].arm);
-        if (!mask.some(Boolean)) { msg(T.noArm); return; }
+    function start(at, limit) {
+      if (rec || dead) return Promise.resolve(false);
+      return ensureNode().then(n => {
+        if (!n || rec) return false;
+        const mask = Array.from({ length: MAXTR }, (_, i) => i < S.nTr && S.tr[i].arm && (!limit || !!srcOf(S.tr[i].src)));   // Snel opnemen slaat sporen zonder bron over: een uur stilte per spoor is nutteloos
+        if (!mask.some(Boolean)) { msg(T.noArm); return false; }
         rec = { t0: performance.now(), frames: 0, sr: ctx.sampleRate, tracks: mask.map((m, i) => m ? { i, name: trName(i), from: srcLabel(S.tr[i].src), L: [], R: [] } : null) };
-        n.port.postMessage({ cmd: 'start', mask, at: at || ctx.currentTime + 0.02 });
-        msg(''); paint();
+        n.port.postMessage({ cmd: 'start', mask, at: at != null ? at : ctx.currentTime + 0.02, frames: limit || 0 });
+        msg(''); paint(); return true;
       });
     }
     function stop() { if (rec && node) node.port.postMessage({ cmd: 'stop' }); }
@@ -240,6 +244,7 @@ export default {
       const tracks = r.tracks.filter(Boolean); frames = Math.min(frames || r.frames, ...tracks.map(t => t.L.reduce((a, b) => a + b.length, 0)));
       if (frames > 0) { nTake++; takes.unshift({ n: nTake, frames, sr: r.sr, dur: frames / r.sr, at: new Date(), tracks }); }
       paint(); msg(frames > 0 ? T.took(nTake, tracks.length, fmtT(frames / r.sr)) : T.nothing);
+      if (offRes) { const x = offRes; offRes = null; x(frames > 0 ? takes[0] : null); }
     }
     const bytesOf = tk => tk.frames * tk.tracks.length * 8;
     const mb = b => (b / 1048576).toFixed(b > 104857600 ? 0 : 1) + ' MB';
@@ -343,6 +348,19 @@ export default {
       onBundle(port, key, b) {
         if (b) { bundles.set(key, b); autoAssign(b); } else { bundles.delete(key); seen.delete(key); }
         connectAll(); if (el && !rec) paintTracks(); else if (el) paintInfo();
+      },
+      // Snel opnemen (host, js/render.js): neemt `frames` frames op vanaf audiotijd `at` en geeft de take daarna terug als losse Float32Arrays
+      offlineRecord(o) { o = o || {}; offDone = new Promise(r => { offRes = r; }); return start(+o.at || 0, Math.round(+o.frames) || 0).then(ok => { if (!ok && offRes) { const x = offRes; offRes = null; x(null); } return ok; }); },
+      offlineTake() {
+        return (offDone || Promise.resolve(null)).then(tk => {
+          if (!tk) return null; const cat = (parts, n) => { const o = new Float32Array(n); let p = 0; for (const a of parts) { const k = Math.min(a.length, n - p); o.set(k === a.length ? a : a.subarray(0, k), p); p += k; if (p >= n) break; } return o; };
+          return { frames: tk.frames, sr: tk.sr, tracks: tk.tracks.map(t => ({ i: t.i, name: t.name, from: t.from, L: cat(t.L, tk.frames), R: cat(t.R, tk.frames) })) };
+        });
+      },
+      offlineAdd(tk) {
+        if (!tk || !Array.isArray(tk.tracks) || !(tk.frames > 0)) return; nTake++;
+        takes.unshift({ n: nTake, frames: tk.frames, sr: tk.sr, dur: tk.frames / tk.sr, at: new Date(), tracks: tk.tracks.map(t => ({ i: t.i, name: t.name, from: t.from, L: [t.L], R: [t.R] })) });
+        paint(); msg(T.took(nTake, tk.tracks.length, fmtT(tk.frames / tk.sr)));
       },
       onTransport({ playing }) { if (!S.withTransport) return; if (playing) start(ctx.currentTime + 0.05); else stop(); },
       getPreset() { const s = self.getState(); s.tr.forEach(t => { delete t.src; }); return s; },

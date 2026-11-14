@@ -4,6 +4,18 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.47.0 (2026-11-14)
+
+### Toegevoegd
+- **Snel opnemen:** een knop naast **Start** die het hele lied zonder geluid en sneller dan realtime opneemt in je Multitrack, op de achtergrond. Patchkamer speelt het lied in een onzichtbare kopie van zichzelf op een offline audiocontext, met een virtuele klok voor de timers van de host en de apparaten. Je hoort niets en de pagina blijft bruikbaar. Je kiest de lengte van de opname en eventueel wanneer het lied zelf stopt (de rest is voor galm en uitklinkende noten). De take komt in de Multitrack te staan zoals een live take: een stereo-WAV per kanaal, sample-gelijk, precies zo lang als gevraagd; een schone take voor mastering, zonder haperingen of tikken van een drukke audiodraad. Annuleren kan altijd met dezelfde knop. Niets uit de onzichtbare kopie wordt bewaard: je werkruimten en instellingen blijven zoals ze zijn.
+- **Multitrack 1.12.0:** neemt een exact aantal frames op en heeft drie methoden voor Snel opnemen (`offlineRecord`, `offlineTake`, `offlineAdd`, zie zijn `AGENTS.md`). Gearmde sporen zonder bron slaat Snel opnemen over. Live opnemen is ongewijzigd. Nieuwe worklet-naam `nl-patchkamer-multitrack-1-12-0`.
+
+### Getest (headless Chromium, song Skyline Ignition, 22 apparaten; niet beluisterd)
+- Het hele lied (4:34, 8 sporen, 16 bit): klaar in 4:22, dus maar ongeveer 1,05 keer realtime; de eerste 20 s liepen op 1,2 tot 1,4 keer, de drop is zwaarder. Alle sporen hebben precies de gevraagde lengte, geen paginafouten, geen sprong boven 0,15 in een spoor. De snelheid wordt begrensd door het audiowerk van de apparaten: Snel opnemen is vooral om zonder geluid en zonder haperingen op te nemen, niet om veel sneller te zijn.
+- Drums: gelijk aan een live take (correlatie 0,99996, zelfde niveau). Twee keer Snel opnemen van hetzelfde lied geeft hetzelfde tot ongeveer −70 dB of beter (niet bit voor bit: berichten aan worklets komen op net andere momenten aan).
+- Apparaten met een vrij lopende modulatie (de chorus van Chord Poly) beginnen die elke keer op hetzelfde punt, waardoor die sporen afwijken van een live take, die afhangt van hoe lang de pagina al openstond.
+- Niet getest: apparaten die bestanden laden (kits van Acoustic Drums, sample-apparaten, convolutiegalm), ingangen van buiten (microfoon, MIDI en Audio Capture worden niet afgespeeld), een achtergrondtab en de desktop-app, en andere opnemers dan de Multitrack (de Recorder biedt Snel opnemen nog niet aan).
+
 ## 0.46.0 (2026-11-14)
 
 ### Toegevoegd

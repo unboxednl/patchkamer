@@ -4,6 +4,18 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.47.0 (2026-11-14)
+
+### Added
+- **Fast record:** a button next to **Start** that records the whole song into your Multitrack without sound and faster than real time, in the background. Patchkamer plays the song in a hidden copy of itself on an offline audio context, with a virtual clock for the timers of the host and the devices. You hear nothing, and the page stays usable. You choose the length of the recording and optionally when the song itself stops (the rest is for reverb and ringing notes). The take lands in the Multitrack like a live take: one stereo WAV per channel, sample-aligned, exactly the length you asked for, so a clean take for mastering without dropouts or clicks from a busy audio thread. Cancel any time with the same button. Nothing from the hidden copy is saved: your workspaces and settings stay as they are.
+- **Multitrack 1.12.0:** records an exact number of frames and has three methods for Fast record (`offlineRecord`, `offlineTake`, `offlineAdd`, see its `AGENTS.md`). Armed tracks without a source are skipped in Fast record. Live recording is unchanged. New worklet name `nl-patchkamer-multitrack-1-12-0`.
+
+### Tested (headless Chromium, song Skyline Ignition, 22 devices; not listened to)
+- The whole song (4:34, 8 tracks, 16 bit): done in 4:22, so only about 1.05 times real time; the first 20 s ran at 1.2 to 1.4 times, the drop is heavier. All tracks have exactly the requested length, no page errors, no jump above 0.15 in any track. The speed is limited by the audio work of the devices, so Fast record is mainly for recording without sound and without dropouts, not for being much faster.
+- Drums: the same as a live take (correlation 0.99996, same level). Two Fast records of the same song are the same to within about −70 dB or better (not bit for bit: messages to worklets arrive at slightly different moments).
+- Devices with a free-running modulation (the chorus of Chord Poly) start it at the same point every time, so those tracks differ from a live take, which depends on how long the page had been open.
+- Not tested: devices that load files (Acoustic Drums kits, sample devices, convolution reverb), inputs from outside (microphone, MIDI, Audio Capture are not played), a background tab and the desktop app, other devices than the Multitrack as recorder (the Recorder does not offer Fast record yet).
+
 ## 0.46.0 (2026-11-14)
 
 ### Added
