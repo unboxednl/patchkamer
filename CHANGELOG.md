@@ -4,6 +4,13 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.48.0 (2026-11-14)
+
+### Changed
+
+- **Sax Studio 1.3.0: long held notes no longer tick.** The recordings loop over 80 to 110 ms, and on a long note that repetition was audible as ticking. On load the device now bakes, per recording, a long loop of more than two seconds of ordinary sound, with a 120 ms crossfade at a start point that matches the end in phase and level. If that fails, the short loop is kept. Measured (12 s held): the peak of the second derivative against the median fell from 53 to 11 (alto), 174 to 18 (tenor) and 94 to 26 (baritone). Not listened to. The sustain itself (the envelope) was not processed separately: the long loop carries the recording's natural variation.
+- **Sax Studio 1.3.1: no octave jump above or below the range.** A note outside the range of the recordings was folded by an octave just 2 semitones beyond it, so on the tenor G5 in a scale jumped an octave down. Such a note is now retuned from the nearest recording (up to 7 semitones above, 4 below the range); only beyond that does the octave fold apply. Far outside the range, retuned notes sound less natural.
+
 ## 0.47.0 (2026-11-14)
 
 ### Added

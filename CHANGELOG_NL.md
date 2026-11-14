@@ -4,6 +4,13 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.48.0 (2026-11-14)
+
+### Gewijzigd
+
+- **Sax Studio 1.3.0: lang aangehouden noten tikken niet meer.** De opnames hebben een lus van 80 tot 110 ms, en bij een lange noot hoorde je die herhaling als tikken. Het apparaat bakt nu bij het laden per opname een lange lus van ruim twee seconden gewone klank, met een crossfade van 120 ms op een beginpunt dat in fase en niveau op het eind aansluit. Lukt dat niet, dan blijft de korte lus. Gemeten (12 s aangehouden): de piek van de tweede afgeleide tegen de mediaan daalde van 53 naar 11 (alt), 174 naar 18 (tenor), 94 naar 26 (bariton). Niet beluisterd. De sustain zelf (de omhullende) is niet apart bewerkt: de lange lus bevat de natuurlijke variatie van de opname.
+- **Sax Studio 1.3.1: geen octaafsprong meer boven of onder het bereik.** Een noot buiten het bereik van de opnames werd al 2 halve tonen verder teruggevouwen met een octaaf, dus bij de tenor sprong G5 in een toonladder een octaaf omlaag. Nu wordt zo'n noot bijgestemd vanaf de dichtstbijzijnde opname (tot 7 halve tonen boven, 4 onder het bereik); pas daarbuiten volgt de octaafsprong. Ver buiten het bereik klinkt bijgestemd minder natuurlijk.
+
 ## 0.47.0 (2026-11-14)
 
 ### Toegevoegd

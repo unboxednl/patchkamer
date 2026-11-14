@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.3.1 — Een noot net boven of onder het bereik van de opnames springt niet meer een octaaf: hij wordt bijgestemd vanaf de dichtstbijzijnde opname (hoog tot 7, laag tot 4 halve tonen). Bij de tenor klonk G5 vroeger een octaaf lager in een toonladder.
+// 1.3.0 — Lange, naadloze lus: een lang aangehouden noot tikt niet meer. De korte lus van de opname (80 tot 110 ms) wordt vervangen door een lus van ruim twee seconden gewone klank met een crossfade van 120 ms, met het beginpunt gezocht waar begin en eind in fase en niveau op elkaar aansluiten. Lukt dat niet, dan blijft de korte lus.
 // 1.2.0 — restoreFiles() (contract v1.36): na het openen van een song haalt de host de opnames opnieuw op als de state `kit: true` heeft (de gebruiker had opnames geladen); dezelfde laadroutine als de knop, niets als ze al kloppen.
 // 1.1.0 — Nieuwe regelaar Schuren (rasp, standaard 0,4): bandbegrensde ruis moduleert de amplitude van de klank, zodat er rond de harmonischen een lichte ruwheid ontstaat die met de toon meeklinkt en stopt; 0 = zoals 1.0.0. Gemeten bij alt, noot 62: ruis tussen de harmonischen -24 dB (0), -20 (0,3), -15 (0,6), -11 (1); de banden boven 3 kHz veranderen niet. Niet beluisterd.
 // 1.0.0 — Sax Studio: gesampelde saxofoons (sopraan, alto, tenor, bariton) voor sequencers (Patchkamer contract v1.36).
@@ -221,7 +223,7 @@ a{color:var(--au)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}`;
 
 export default {
-  id: 'nl.patchkamer.saxstudio', name: 'Sax Studio', version: '1.2.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.saxstudio', name: 'Sax Studio', version: '1.3.1', kind: 'instrument', category: 'synth',
   ui: { width: 760, minWidth: 320 },
   about: { nl: ABOUT.nl, en: ABOUT.en },
   modExclude: MODEX,
@@ -345,7 +347,10 @@ export default {
       while (k < bs.length && v > bs[k]) k++;
       return { [names[Math.min(k, names.length - 1)]]: 1 };
     }
-    const foldNote = (n, inst) => { const lo = CAT[inst].base, hi = CAT[inst].hi; let k = 0; while (n < lo - 2 && k++ < 8) n += 12; while (n > hi + 2 && k++ < 16) n -= 12; return n; };
+    // Een noot buiten het bereik van de opnames wordt bijgestemd vanaf de dichtstbijzijnde opname (hoog tot 7, laag tot 4 halve tonen), zodat een toonladder doorloopt;
+    // pas daarbuiten volgt een octaafsprong (1.3.1: vroeger al 2 halve tonen boven het bereik, wat bij een toonladder opeens een octaaf lager klonk)
+    const OVER_HI = 7, OVER_LO = 4;
+    const foldNote = (n, inst) => { const lo = CAT[inst].base, hi = CAT[inst].hi; let k = 0; while (n < lo - OVER_LO && k++ < 8) n += 12; while (n > hi + OVER_HI && k++ < 16) n -= 12; return n; };
     const should = (on, accent, long) => on === 'all' || (on === 'accent' && accent) || (on === 'long' && long);
 
     // één stem op één toonhoogte
@@ -372,7 +377,7 @@ export default {
       for (const L of names) {
         const w = W[L]; if (!(w > .01)) continue; const arr = kit.layers[L]; if (!arr.length) continue;
         const s = pickSample(arr, P.note); if (!s || !s.buf) continue;
-        const src = own(ctx.createBufferSource()), g = gain(); src.buffer = s.buf; src.loop = true; src.loopStart = s.ls; src.loopEnd = s.le;
+        const src = own(ctx.createBufferSource()), g = gain(); src.buffer = s.buf; src.loop = true; src.loopStart = s.la; src.loopEnd = s.lb;
         const cents = (P.note - s.nat) * 100 + P.cents - P.sub * 8; v.cents.push(cents);
         g.gain.value = w * amp * Math.pow(10, s.vol / 20);
         src.connect(g); g.connect(mix); vg.connect(src.detune);
@@ -478,6 +483,29 @@ export default {
     const canNet = () => typeof host.fetchFile === 'function';
     const errText = e => { const c = e && e.code; return c === 'url' ? T.errUrl : c === 'aborted' ? T.errAborted : c === 'network' ? T.errNetwork : c === 'http' ? T.errHttp(e.status) : c === 'size' ? T.errSize : c === 'response' ? T.errResponse : c === 'decode' ? T.errDecode : T.errOther; };
     function rms(d, a, b) { a = Math.max(0, a | 0); b = Math.min(d.length, b | 0); if (b <= a) return 0; let s = 0; for (let i = a; i < b; i++) s += d[i] * d[i]; return Math.sqrt(s / (b - a)); }
+    // Een lange, naadloze lus. De korte lus van de opname (80 tot 110 ms) hoor je bij een lang aangehouden noot als tikken: dezelfde tien periodes steeds opnieuw.
+    // De opname loopt tot het eind van die lus en heeft daarvoor ruim twee seconden gewone, aangehouden klank. Die gebruiken we als lus: van een punt kort na de aanzet
+    // tot het eind. Het stuk vlak voor het eind wordt vermengd met het stuk vlak voor het beginpunt (crossfade), en het beginpunt wordt gezocht waar die twee stukken het
+    // best op elkaar lijken (zelfde fase en niveau), zodat er geen sprong en geen dip overblijft. Lukt dat niet (te kort), dan blijft de korte lus.
+    function longLoop(b, on, lb) {
+      try {
+        const sr = b.sampleRate, N = b.length, B = Math.min(N - 1, Math.round(lb * sr)), X = Math.round(.12 * sr), ch = b.getChannelData(0);
+        const lo = Math.max(Math.round((on + .35) * sr), X + Math.round(.02 * sr)), hi = B - Math.round(1.0 * sr);
+        if (!(hi > lo + sr * .05) || B <= X) return null;
+        const st = 6, tail = B - X;
+        const score = A => { let ab = 0, aa = 0, bb = 0; const o = A - X; for (let i = 0; i < X; i += st) { const u = ch[tail + i], v = ch[o + i]; ab += u * v; aa += u * u; bb += v * v; }
+          if (!(aa > 1e-12) || !(bb > 1e-12)) return { sc: -1, ncc: 0 }; const ncc = ab / Math.sqrt(aa * bb), r = Math.sqrt(bb / aa); return { sc: ncc * Math.min(r, 1 / r), ncc }; };
+        let bestA = -1, best = { sc: -2, ncc: 0 }; const gs = Math.round(.01 * sr);
+        for (let A = lo; A <= hi; A += gs) { const q = score(A); if (q.sc > best.sc) { best = q; bestA = A; } }
+        if (bestA < 0) return null;
+        const c0 = bestA; for (let A = Math.max(lo, c0 - gs); A <= Math.min(hi, c0 + gs); A++) { const q = score(A); if (q.sc > best.sc) { best = q; bestA = A; } }
+        if (!(best.sc > .5)) return null;   // geen stuk dat goed aansluit: liever de korte lus dan een hoorbare dip
+        const lin = best.ncc > .85;
+        for (let c = 0; c < b.numberOfChannels; c++) { const d = b.getChannelData(c), src = d.slice(bestA - X, bestA);
+          for (let i = 0; i < X; i++) { const t = (i + 1) / X, wi = lin ? t : Math.sin(t * Math.PI / 2), wo = lin ? 1 - t : Math.cos(t * Math.PI / 2); d[tail + i] = d[tail + i] * wo + src[i] * wi; } }
+        return { a: bestA / sr, b: B / sr };
+      } catch (err) { return null; }
+    }
     // een noot-opname: kap af bij het eind van de lus, meet de aanzet
     function makeSample(f, buf, lp) {
       const sr = buf.sampleRate; let ls, le;
@@ -487,7 +515,8 @@ export default {
       if (n < buf.length) { b = ctx.createBuffer(buf.numberOfChannels, n, sr); for (let c = 0; c < buf.numberOfChannels; c++) b.copyToChannel(buf.getChannelData(c).subarray(0, n), c); }
       const d = b.getChannelData(0), sus = rms(d, Math.min(.25, ls * .3) * sr, Math.min(1, ls) * sr), w = Math.max(8, Math.round(sr * .003)); let on = 0;
       if (sus > 1e-5) for (let i = 0; i + w < Math.min(d.length, sr); i += Math.round(w / 2)) { if (rms(d, i, i + w) > .1 * sus) { on = Math.max(0, i / sr - .002); break; } }
-      return { nat: f.nat, vol: f.vol, buf: b, ls, le: Math.min(le, b.duration - .001), on, sus, loop: !!lp };
+      const lb0 = Math.min(le, b.duration - .001), bk = longLoop(b, on, lb0);
+      return { nat: f.nat, vol: f.vol, buf: b, ls, le: lb0, la: bk ? bk.a : ls, lb: bk ? bk.b : lb0, on, sus, loop: !!lp, long: !!bk };
     }
     // het niveau per opname gelijktrekken binnen elke laag (90% van het verschil, hoogstens 6 dB); het verschil tussen de lagen blijft
     function normalise(lib) {
