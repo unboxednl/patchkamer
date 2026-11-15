@@ -144,7 +144,13 @@ function listen() {
 }
 
 function locked(win, origin) {
-  win.webContents.setWindowOpenHandler(({ url }) => { if (/^https?:/i.test(url)) shell.openExternal(url); return { action: 'deny' }; });
+  // the measuring page opens in a window of the app itself: a measurement in the default browser says nothing about the app
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (url === origin + '/meten.html') return { action: 'allow', overrideBrowserWindowOptions: { width: 960, height: 820, autoHideMenuBar: true } };
+    if (/^https?:/i.test(url)) shell.openExternal(url);
+    return { action: 'deny' };
+  });
+  win.webContents.on('did-create-window', child => { if (child.removeMenu) child.removeMenu(); locked(child, origin); });
   win.webContents.on('will-navigate', (e, url) => { if (!url.startsWith(origin)) { e.preventDefault(); if (/^https?:/i.test(url)) shell.openExternal(url); } });
 }
 

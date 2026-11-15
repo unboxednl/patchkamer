@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.49.1 (2026-11-15)
+
+### Opgelost
+- **App: de meetpagina voor audio opent in de app.** De link onder Instellingen > Audio opende `meten.html` in de standaardbrowser, en die meting zegt niets over het audiopad van de app. Hij opent nu in een eigen appvenster, zodat de meting over de app gaat.
+
 ## 0.49.0 (2026-11-14)
 
 ### Toegevoegd

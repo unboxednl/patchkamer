@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.49.1 (2026-11-15)
+
+### Fixed
+- **App: the audio measuring page opens in the app.** The link under Settings > Audio opened `meten.html` in the default browser, which says nothing about the audio path of the app. It now opens in its own app window, so the measurement is about the app.
+
 ## 0.49.0 (2026-11-14)
 
 ### Added
