@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.49.3 (2026-11-16)
+
+### Added
+- **App: the measuring page can measure the ASIO route.** `meten.html` has a new card, *ASIO route of the app* (only in the app, only with ASIO on). While the host plays a song, it reads the ring buffer for ten seconds and reports the driver, the buffer, the delay the driver reports, the average and highest ring fill, the estimated delay and the glitches (underruns). The report gets `asio: true` and an `asioRoute` block. The headroom and main thread tests on that page still run through the browser's own audio path, not ASIO; the page says so.
+
 ## 0.49.2 (2026-11-16)
 
 ### Fixed

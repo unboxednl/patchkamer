@@ -56,6 +56,10 @@ function handler(req, res) {
   if (p === '/' || p === '/patchkamer.html') return sendHost(res);
   if (p === '/meten.html') return sendFile(res, path.join(hostDir, 'meten.html'));
   if (p === '/version.json') return sendFile(res, path.join(hostDir, 'version.json'));
+  if (p === '/__app/asio-status.json') { // for meten.html: is the host playing through ASIO, and how is the ring doing (loopback only, no secrets)
+    let stats = null; try { if (nativeAudio && asioInfo && asioInfo.ok) stats = nativeAudio.stats(); } catch (e) {}
+    return send(res, 200, JSON.stringify({ info: asioInfo, stats }), TYPES['.json']);
+  }
   if (p === '/__app/asio.js') return sendFile(res, path.join(__dirname, 'app-asio.js'));
   { const parts = p.split('/').filter(Boolean);
     if (parts.length >= 2 && HOST_FOLDERS.has(parts[0]) && /\.(m?js|css|json|png|svg|woff2?|ico)$/i.test(p)) {

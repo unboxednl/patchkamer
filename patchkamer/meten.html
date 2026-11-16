@@ -57,6 +57,14 @@ pre{margin:0;white-space:pre-wrap;word-break:break-all;font:12px/1.4 ui-monospac
   <p class="dim" id="t_load_note"></p>
 </div>
 
+<div class="card" id="c_asio" hidden>
+  <h2 id="t_h_asio"></h2>
+  <p class="dim" id="t_asio_note"></p>
+  <div class="row"><button id="b_asio" class="go"></button></div>
+  <div class="verdict" id="v_asio"></div>
+  <table id="tb_asio"></table>
+</div>
+
 <div class="card">
   <h2 id="t_h_rep"></h2>
   <div class="row"><button id="b_copy"></button><button id="b_save"></button></div>
@@ -67,7 +75,10 @@ pre{margin:0;white-space:pre-wrap;word-break:break-all;font:12px/1.4 ui-monospac
 (function(){
 'use strict';
 const D={
-nl:{title:'Audiometing',intro:'Meet op deze computer hoeveel vertraging het geluid heeft en hoeveel rekenruimte de audiothread van de browser heeft. Er klinkt niets. Sluit andere zware programma\'s en draai de test het liefst met het scherm aan en de stroom aangesloten.',
+nl:{title:'Audiometing',
+ h_asio:'ASIO-route van de app',b_asio:'Meet de ASIO-route (10 s)',asio_note:'Start dit terwijl de host in het hoofdvenster een song speelt via ASIO. De test leest tien seconden lang de stand van de ringbuffer uit. De andere metingen op deze pagina gaan niet via ASIO.',
+ asio_off:'ASIO staat uit of is niet beschikbaar. Zet hem aan met de knop ASIO linksonder in het hoofdvenster, laat de host opnieuw laden en speel een song.',asio_t_driver:'Driver',asio_t_buf:'Buffer van de driver',asio_t_drv:'Vertraging die de driver meldt',asio_t_ring:'Ringbuffer (gemiddeld / hoogste)',asio_t_est:'Geschatte vertraging (gemiddeld)',asio_t_gaps:'Haperingen (underruns) in de meting',asio_t_over:'Overruns',asio_t_ppm:'Klokcorrectie (ppm, maximaal 3000)',
+ asio_v_ok:'Geen haperingen in {0} seconden.',asio_v_bad:'Haperingen in {1} seconden: {0}.',asio_idle:'De ring bleef leeg: er komt geen geluid uit de host. Speel een song en meet opnieuw.',asio_run:'Meten… {0} s',intro:'Meet op deze computer hoeveel vertraging het geluid heeft en hoeveel rekenruimte de audiothread van de browser heeft. Er klinkt niets. Sluit andere zware programma\'s en draai de test het liefst met het scherm aan en de stroom aangesloten.',
  h_set:'Instellingen',l_hint:'Latency-keuze',l_rate:'Sample rate',lat:'Meet de vertraging',load:'Meet de rekenruimte',stop:'Stop',
  h_lat:'Vertraging',h_load:'Rekenruimte van de audiothread',h_rep:'Rapport',copy:'Kopieer',save:'Bewaar als bestand',copied:'Gekopieerd',
  c_item:'Onderdeel',c_val:'Waarde',base:'Browserbuffer (baseLatency)',out:'Uitgang en geluidskaart (outputLatency)',sum:'Samen',rate:'Sample rate',state:'Toestand',route:'Audioroute',
@@ -78,7 +89,10 @@ nl:{title:'Audiometing',intro:'Meet op deze computer hoeveel vertraging het gelu
  load_note:'Elke stap laat de audiothread een vast deel van de tijd tussen twee buffers bezig houden met rekenwerk (de sommen zijn eerst op de hoofdthread geijkt). 100 % betekent: precies de hele bufferduur. Een uitkomst ver onder de 100 % zegt dat er in de praktijk minder rekenruimte is dan de klok doet vermoeden, bijvoorbeeld door stroombesparing. Een song met veel apparaten gebruikt zijn eigen deel van deze ruimte.',
  st_cal:'Even ijken…',st_run:'Stap {0} van {1}: {2} % belasting…',st_done:'Klaar.',st_stop:'Gestopt.',st_lat:'Vertraging gemeten.',st_nowebaudio:'Deze browser heeft geen Web Audio.',st_fail:'Mislukt: ',
  main_t:'Hoofdthread-test',main_ok:'Met een bezette hoofdthread (scherm, knoppen, laden) bleef de klok op {0} %.',main_bad:'Met een bezette hoofdthread zakte de klok naar {0} %: de audio is niet los van de rest van de pagina.'},
-en:{title:'Audio measurement',intro:'Measures on this computer how much delay the sound has and how much processing headroom the browser\'s audio thread has. Nothing is played. Close other heavy programs and, if you can, run the test with the screen on and the power plugged in.',
+en:{title:'Audio measurement',
+ h_asio:'ASIO route of the app',b_asio:'Measure the ASIO route (10 s)',asio_note:'Start this while the host in the main window plays a song through ASIO. The test reads the state of the ring buffer for ten seconds. The other measurements on this page do not go through ASIO.',
+ asio_off:'ASIO is off or not available. Turn it on with the ASIO button at the bottom left of the main window, let the host reload and play a song.',asio_t_driver:'Driver',asio_t_buf:'Driver buffer',asio_t_drv:'Delay the driver reports',asio_t_ring:'Ring buffer (average / highest)',asio_t_est:'Estimated delay (average)',asio_t_gaps:'Glitches (underruns) during the measurement',asio_t_over:'Overruns',asio_t_ppm:'Clock correction (ppm, at most 3000)',
+ asio_v_ok:'No glitches in {0} seconds.',asio_v_bad:'Glitches in {1} seconds: {0}.',asio_idle:'The ring stayed empty: no sound comes from the host. Play a song and measure again.',asio_run:'Measuring… {0} s',intro:'Measures on this computer how much delay the sound has and how much processing headroom the browser\'s audio thread has. Nothing is played. Close other heavy programs and, if you can, run the test with the screen on and the power plugged in.',
  h_set:'Settings',l_hint:'Latency choice',l_rate:'Sample rate',lat:'Measure the delay',load:'Measure the headroom',stop:'Stop',
  h_lat:'Delay',h_load:'Headroom of the audio thread',h_rep:'Report',copy:'Copy',save:'Save as file',copied:'Copied',
  c_item:'Item',c_val:'Value',base:'Browser buffer (baseLatency)',out:'Output and sound card (outputLatency)',sum:'Total',rate:'Sample rate',state:'State',route:'Audio route',
@@ -95,14 +109,14 @@ const $=id=>document.getElementById(id), fmt=(s,...a)=>s.replace(/\{(\d+)\}/g,(m
 const set=(id,t)=>{ $(id).textContent=t; };
 document.title=T.title; set('t_title',T.title); set('t_intro',T.intro); set('t_h_set',T.h_set); set('t_l_hint',T.l_hint); set('t_l_rate',T.l_rate);
 set('b_lat',T.lat); set('b_load',T.load); set('b_stop',T.stop); set('t_h_lat',T.h_lat); set('t_h_load',T.h_load); set('t_h_rep',T.h_rep); set('b_copy',T.copy); set('b_save',T.save);
-set('t_lat_note',T.lat_note); set('t_load_note',T.load_note);
+set('t_lat_note',T.lat_note); set('t_load_note',T.load_note); set('t_h_asio',T.h_asio); set('b_asio',T.b_asio); set('t_asio_note',T.asio_note);
 
 const REP={version:1,when:null,userAgent:navigator.userAgent,platform:navigator.platform||'',cores:navigator.hardwareConcurrency||null,isolated:!!self.crossOriginIsolated,
   asio:!!(window.__pkAsio&&window.__pkAsio.info&&window.__pkAsio.info.ok),latency:null,load:null,mainThread:null};
 function showRep(){ REP.when=new Date().toISOString(); $('json').textContent=JSON.stringify(REP,null,1); }
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let stopFlag=false, busy=false, ctx=null;
-function setBusy(b){ busy=b; $('b_lat').disabled=b; $('b_load').disabled=b; $('b_stop').disabled=!b; $('hint').disabled=b; $('rate').disabled=b; }
+function setBusy(b){ busy=b; $('b_lat').disabled=b; $('b_load').disabled=b; $('b_asio').disabled=b; $('b_stop').disabled=!b; $('hint').disabled=b; $('rate').disabled=b; }
 function opts(){ const o={latencyHint:$('hint').value}; const r=+$('rate').value; if(r) o.sampleRate=r; return o; }
 async function open(){ const AC=window.AudioContext||window.webkitAudioContext; if(!AC) throw new Error(T.st_nowebaudio); const c=new AC(opts()); await c.resume().catch(()=>{}); return c; }
 async function closeCtx(){ if(ctx){ try{ await ctx.close(); }catch(e){} ctx=null; } }
@@ -175,6 +189,26 @@ $('b_load').onclick=()=>run(measureLoad);
 $('b_stop').onclick=()=>{ stopFlag=true; };
 $('b_copy').onclick=async()=>{ try{ await navigator.clipboard.writeText($('json').textContent); set('status',T.copied); }catch(e){ const r=document.createRange(); r.selectNodeContents($('json')); const s=getSelection(); s.removeAllRanges(); s.addRange(r); } };
 $('b_save').onclick=()=>{ showRep(); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([$('json').textContent],{type:'application/json'})); a.download='patchkamer-meting.json'; a.click(); };
+// ASIO-route: only in the app (the page is served with /__app/asio-status.json); in a browser the card stays hidden
+async function asioStatus(){ try{ const r=await fetch('/__app/asio-status.json',{cache:'no-store'}); if(!r.ok) return null; return await r.json(); }catch(e){ return null; } }
+async function measureAsio(){
+  const first=await asioStatus(); const t=$('tb_asio'), v=$('v_asio'); t.innerHTML=''; v.textContent=''; v.className='verdict';
+  if(!first||!first.info||!first.info.ok||!first.stats){ v.textContent=T.asio_off; v.className='verdict warn'; REP.asio=false; REP.asioRoute=null; showRep(); return; }
+  const sr=first.stats.sampleRate||first.info.sampleRate||48000, fills=[], u0=first.stats.underruns, o0=first.stats.overruns; let last=first.stats;
+  for(let i=0;i<20&&!stopFlag;i++){ set('status',fmt(T.asio_run,Math.round((20-i)/2))); await sleep(500); const s=await asioStatus(); if(!s||!s.stats) break; last=s.stats; fills.push(s.stats.fill); }
+  const avg=fills.length?fills.reduce((a,b)=>a+b,0)/fills.length:0, hi=fills.length?Math.max(...fills):0, f=x=>x/sr*1000;
+  const drv=(first.info.outputLatency||0)/sr*1000, buf=(last.bufferSize||first.info.bufferSize||0)/sr*1000, est=f(avg)+drv, gaps=last.underruns-u0, over=last.overruns-o0, secs=Math.round(fills.length/2);
+  REP.asio=true;
+  REP.asioRoute={driver:first.info.driver,sampleRate:sr,bufferFrames:last.bufferSize||first.info.bufferSize||null,bufferMs:+buf.toFixed(2),driverOutputMs:+drv.toFixed(2),ringAvgMs:+f(avg).toFixed(2),ringMaxMs:+f(hi).toFixed(2),ringTargetMs:+f(last.target||0).toFixed(2),estimatedMs:+est.toFixed(2),underruns:gaps,overruns:over,ratioPpm:Math.round(last.ratioPpm||0),seconds:secs};
+  t.innerHTML='<tr><th>'+T.c_item+'</th><th class="n">'+T.c_val+'</th></tr>'+row(T.asio_t_driver,first.info.driver)+row(T.asio_t_buf,buf.toFixed(2)+' ms')+row(T.asio_t_drv,drv.toFixed(1)+' ms')+
+    row(T.asio_t_ring,f(avg).toFixed(1)+' / '+f(hi).toFixed(1)+' ms')+row(T.asio_t_est,'~'+est.toFixed(1)+' ms',est>25?'warn':'ok')+row(T.asio_t_gaps,gaps,gaps?'bad':'ok')+row(T.asio_t_over,over)+row(T.asio_t_ppm,Math.round(last.ratioPpm||0));
+  if(!fills.length||hi<1){ v.textContent=T.asio_idle; v.className='verdict warn'; }
+  else if(gaps){ v.textContent=fmt(T.asio_v_bad,gaps,secs); v.className='verdict bad'; }
+  else { v.textContent=fmt(T.asio_v_ok,secs); v.className='verdict ok'; }
+  set('status',T.st_done); showRep();
+}
+$('b_asio').onclick=()=>run(measureAsio);
+asioStatus().then(s=>{ if(s&&s.info){ $('c_asio').hidden=false; REP.asio=!!s.info.ok; showRep(); } });
 showRep();
 })();
 </script>
