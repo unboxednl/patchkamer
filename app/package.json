@@ -1,7 +1,7 @@
 {
   "name": "patchkamer-app",
   "productName": "Patchkamer",
-  "version": "0.49.1",
+  "version": "0.49.2",
   "description": "Patchkamer as a desktop app: the same host in its own window, with the bundled library.",
   "main": "main.js",
   "license": "AGPL-3.0-or-later",
@@ -13,6 +13,7 @@
     "predist": "node sync-version.js",
     "dist": "electron-builder --win portable --x64",
     "build:native": "node-gyp rebuild",
+    "test:package": "node test-package.js",
     "test:native": "g++ -O2 -std=c++17 -Wall native/test/ring_test.cpp -o native/test/ring_test && native/test/ring_test",
     "asio-test": "electron . --asio-test"
   },
@@ -45,6 +46,7 @@
         "to": "patchkamer",
         "filter": [
           "patchkamer.html",
+          "meten.html",
           "version.json",
           "js/**",
           "css/**",
