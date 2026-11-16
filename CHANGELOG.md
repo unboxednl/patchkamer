@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.49.2 (2026-11-16)
+
+### Fixed
+- **App: the audio measuring page was missing from the exe** (404 in the app). `meten.html` is now bundled, and `npm run test:package` checks that every host file the app serves by name is in the exe.
+
 ## 0.49.1 (2026-11-15)
 
 ### Fixed

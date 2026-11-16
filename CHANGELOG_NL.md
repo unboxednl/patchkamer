@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.49.2 (2026-11-16)
+
+### Opgelost
+- **App: de meetpagina voor audio ontbrak in de exe** (404 in de app). `meten.html` zit er nu in, en `npm run test:package` controleert dat elk hostbestand dat de app bij naam serveert in de exe zit.
+
 ## 0.49.1 (2026-11-15)
 
 ### Opgelost
