@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.49.4 (2026-11-23)
+
+### Opgelost
+- **Meetpagina: de vertragingstest zegt niet meer ASIO.** Met ASIO aan stond bij de vertragingstest in de rij *Audioroute* "ASIO (via de app)", terwijl de test een eigen audiocontext van de browser meet. Er staat nu browser, met de opmerking dat de vertraging van ASIO in de ASIO-kaart staat.
+
 ## 0.49.3 (2026-11-16)
 
 ### Toegevoegd

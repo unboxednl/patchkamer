@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.49.4 (2026-11-23)
+
+### Fixed
+- **Measuring page: the delay test no longer says ASIO.** With ASIO on, the row *Audio route* of the delay test said "ASIO (through the app)", while the test measures a browser audio context of its own. It now says browser, with a note that the delay of ASIO is in the ASIO card.
+
 ## 0.49.3 (2026-11-16)
 
 ### Added

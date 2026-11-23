@@ -76,6 +76,7 @@ pre{margin:0;white-space:pre-wrap;word-break:break-all;font:12px/1.4 ui-monospac
 'use strict';
 const D={
 nl:{title:'Audiometing',
+ route_note:'ASIO staat aan, maar deze meting gebruikt een eigen audiocontext van de browser. De vertraging van ASIO staat in de kaart hieronder.',
  h_asio:'ASIO-route van de app',b_asio:'Meet de ASIO-route (10 s)',asio_note:'Start dit terwijl de host in het hoofdvenster een song speelt via ASIO. De test leest tien seconden lang de stand van de ringbuffer uit. De andere metingen op deze pagina gaan niet via ASIO.',
  asio_off:'ASIO staat uit of is niet beschikbaar. Zet hem aan met de knop ASIO linksonder in het hoofdvenster, laat de host opnieuw laden en speel een song.',asio_t_driver:'Driver',asio_t_buf:'Buffer van de driver',asio_t_drv:'Vertraging die de driver meldt',asio_t_ring:'Ringbuffer (gemiddeld / hoogste)',asio_t_est:'Geschatte vertraging (gemiddeld)',asio_t_gaps:'Haperingen (underruns) in de meting',asio_t_over:'Overruns',asio_t_ppm:'Klokcorrectie (ppm, maximaal 3000)',
  asio_v_ok:'Geen haperingen in {0} seconden.',asio_v_bad:'Haperingen in {1} seconden: {0}.',asio_idle:'De ring bleef leeg: er komt geen geluid uit de host. Speel een song en meet opnieuw.',asio_run:'Meten… {0} s',intro:'Meet op deze computer hoeveel vertraging het geluid heeft en hoeveel rekenruimte de audiothread van de browser heeft. Er klinkt niets. Sluit andere zware programma\'s en draai de test het liefst met het scherm aan en de stroom aangesloten.',
@@ -90,6 +91,7 @@ nl:{title:'Audiometing',
  st_cal:'Even ijken…',st_run:'Stap {0} van {1}: {2} % belasting…',st_done:'Klaar.',st_stop:'Gestopt.',st_lat:'Vertraging gemeten.',st_nowebaudio:'Deze browser heeft geen Web Audio.',st_fail:'Mislukt: ',
  main_t:'Hoofdthread-test',main_ok:'Met een bezette hoofdthread (scherm, knoppen, laden) bleef de klok op {0} %.',main_bad:'Met een bezette hoofdthread zakte de klok naar {0} %: de audio is niet los van de rest van de pagina.'},
 en:{title:'Audio measurement',
+ route_note:'ASIO is on, but this measurement uses a browser audio context of its own. The delay of ASIO is in the card below.',
  h_asio:'ASIO route of the app',b_asio:'Measure the ASIO route (10 s)',asio_note:'Start this while the host in the main window plays a song through ASIO. The test reads the state of the ring buffer for ten seconds. The other measurements on this page do not go through ASIO.',
  asio_off:'ASIO is off or not available. Turn it on with the ASIO button at the bottom left of the main window, let the host reload and play a song.',asio_t_driver:'Driver',asio_t_buf:'Driver buffer',asio_t_drv:'Delay the driver reports',asio_t_ring:'Ring buffer (average / highest)',asio_t_est:'Estimated delay (average)',asio_t_gaps:'Glitches (underruns) during the measurement',asio_t_over:'Overruns',asio_t_ppm:'Clock correction (ppm, at most 3000)',
  asio_v_ok:'No glitches in {0} seconds.',asio_v_bad:'Glitches in {1} seconds: {0}.',asio_idle:'The ring stayed empty: no sound comes from the host. Play a song and measure again.',asio_run:'Measuring… {0} s',intro:'Measures on this computer how much delay the sound has and how much processing headroom the browser\'s audio thread has. Nothing is played. Close other heavy programs and, if you can, run the test with the screen on and the power plugged in.',
@@ -129,7 +131,7 @@ async function measureLatency(){
   const asio=REP.asio;
   $('tb_lat').innerHTML='<tr><th>'+T.c_item+'</th><th class="n">'+T.c_val+'</th></tr>'+
     row(T.base,ms(b))+row(T.out,o?ms(o):T.notgiven,o?'':'warn')+row(T.sum,o?ms(sum):'–',!o?'':sum>0.04?'bad':sum>0.02?'warn':'ok')+
-    row(T.rate,ctx.sampleRate+' Hz')+row(T.state,ctx.state)+row(T.route,asio?T.route_asio:T.route_web);
+    row(T.rate,ctx.sampleRate+' Hz')+row(T.state,ctx.state)+row(T.route,T.route_web+(asio?' – '+T.route_note:''));
   $('c_lat').hidden=false;
   REP.latency={hint:$('hint').value,requestedRate:+$('rate').value||null,sampleRate:ctx.sampleRate,baseMs:+(b*1000).toFixed(2),outputMs:o?+(o*1000).toFixed(2):null,state:ctx.state};
   await closeCtx(); set('status',T.st_lat); showRep();
