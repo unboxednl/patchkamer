@@ -4,6 +4,14 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.50.0 (2026-11-25)
+
+### Added
+- **Master volume in the top bar.** With a Speakers on the canvas, a *Volume* slider appears next to Swing. It shows and sets the volume of the Speakers (with more than one Speakers: the highest, and dragging moves them all in the same ratio). The knob on the Speakers card and the slider follow each other. Without Speakers the slider is hidden.
+
+### Fixed
+- **Keyboard 1.2.0: several Keyboards on one canvas no longer play together.** The computer keys (and Z/X for the octave) used to reach every Keyboard, so a second Keyboard played its own devices along. Now only one Keyboard has the computer keys: the one you clicked last (without a click: the first). A Keyboard that loses the keys releases its notes, and its panel says whether it has them. Sound, state, presets and ports are unchanged. Not tried with real hands: tested with a script that presses the keys on two and four Keyboards.
+
 ## 0.49.4 (2026-11-23)
 
 ### Fixed

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — Meerdere Keyboards op één canvas: de computertoetsen (en Z/X voor het octaaf) sturen nu maar één Keyboard aan, dat waar je het laatst op klikte (zonder klik: het eerste); een Keyboard dat de toetsen kwijtraakt laat zijn noten los. Het paneel zegt welk Keyboard de computertoetsen heeft. Geluid, state, presets en poorten ongewijzigd.
 // 1.1.0 — Uitleg naar about (menu Over Keyboard); de UI toont geen uitlegtekst meer.
 // 1.0.0 — Eerste versie (Patchkamer contract v1.28). Een klavier voor andere apparaten: een instelbaar aantal toetsen (25 tot 88), schermtoetsen met de muis of aanraking, de computertoetsen (A, W, S, E…,
 //         Z en X voor een octaaf lager of hoger), snelheid, transponeren, MIDI-kanaal, pitch bend en modulatiewiel, vasthouden (sustain) en Alles uit. Speelmodus puls (noot met lengte) of vasthouden
@@ -11,14 +12,16 @@ const num = (v, a, b, d) => typeof v === 'number' && Number.isFinite(v) ? clamp(
 const NOTE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'], BLACK = [1, 3, 6, 8, 10];
 const noteName = n => NOTE[((n % 12) + 12) % 12] + (Math.floor(n / 12) - 1);
 const KEYS = [25, 37, 49, 61, 76, 88];
+// Alle Keyboards op de pagina delen één set computertoetsen: alleen de houder (laatst aangeklikt, anders het oudste) speelt mee.
+const REG = globalThis.__pkKeyboardKeys || (globalThis.__pkKeyboardKeys = { all: [], active: null });
 // computertoetsen: A W S E D F T G Y H U J K O L P ; '   (witte en zwarte toetsen, vanaf de laagste toets van de rij)
 const KEYMAP = ['KeyA', 'KeyW', 'KeyS', 'KeyE', 'KeyD', 'KeyF', 'KeyT', 'KeyG', 'KeyY', 'KeyH', 'KeyU', 'KeyJ', 'KeyK', 'KeyO', 'KeyL', 'KeyP', 'Semicolon', 'Quote'];
 
 const TXT = {
   nl: { keys: 'Aantal toetsen', start: 'Laagste toets', octave: 'Octaaf', vel: 'Aanslag', mode: 'Speelmodus', pulse: 'Puls (noot met lengte)', hold: 'Vasthouden (noot aan en uit)',
-    len: 'Lengte', transpose: 'Transponeren', channel: 'Kanaal', bend: 'Pitch bend', mod: 'Modulatie', sustain: 'Sustain', panic: 'Alles uit', computer: 'Computertoetsen', computerOn: 'Computertoetsen aan', computerHint: 'Z en X: octaaf lager of hoger', hold1: 'Vasthouden' },
+    len: 'Lengte', transpose: 'Transponeren', channel: 'Kanaal', bend: 'Pitch bend', mod: 'Modulatie', sustain: 'Sustain', panic: 'Alles uit', computer: 'Computertoetsen', computerOn: 'Computertoetsen aan', computerHint: 'Z en X: octaaf lager of hoger', keysMine: 'de computertoetsen sturen dit keyboard aan', keysOther: 'klik op dit keyboard om de computertoetsen hierheen te halen', hold1: 'Vasthouden' },
   en: { keys: 'Number of keys', start: 'Lowest key', octave: 'Octave', vel: 'Velocity', mode: 'Play mode', pulse: 'Pulse (note with length)', hold: 'Hold (note on and off)',
-    len: 'Length', transpose: 'Transpose', channel: 'Channel', bend: 'Pitch bend', mod: 'Modulation', sustain: 'Sustain', panic: 'All off', computer: 'Computer keys', computerOn: 'Computer keys on', computerHint: 'Z and X: octave down or up', hold1: 'Hold' },
+    len: 'Length', transpose: 'Transpose', channel: 'Channel', bend: 'Pitch bend', mod: 'Modulation', sustain: 'Sustain', panic: 'All off', computer: 'Computer keys', computerOn: 'Computer keys on', computerHint: 'Z and X: octave down or up', keysMine: 'the computer keys play this keyboard', keysOther: 'click this keyboard to move the computer keys here', hold1: 'Hold' },
 };
 
 const defaults = () => ({ keys: 61, start: 36, oct: 0, velocity: 0.8, mode: 'hold', duration: 0.4, transpose: 0, channel: 1, computer: true });
@@ -27,12 +30,14 @@ function normalize(s) { s = s && typeof s === 'object' ? s : {}; const d = defau
     duration: num(s.duration, 0.05, 4, d.duration), transpose: int(s.transpose, -24, 24, 0), channel: int(s.channel, 1, 16, 1), computer: s.computer !== false }; }
 
 export default {
-  id: 'nl.patchkamer.keyboard', name: 'Keyboard', about: { nl: 'Klik op de toetsen, of gebruik de computertoetsen (A, W, S, E…). Verbind Noten met een synth, sampler of arpeggiator.', en: 'Click the keys, or use the computer keys (A, W, S, E…). Connect Notes to a synth, sampler or arpeggiator.' }, version: '1.1.0', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 360 },
+  id: 'nl.patchkamer.keyboard', name: 'Keyboard', about: { nl: 'Klik op de toetsen, of gebruik de computertoetsen (A, W, S, E…). Verbind Noten met een synth, sampler of arpeggiator.', en: 'Click the keys, or use the computer keys (A, W, S, E…). Connect Notes to a synth, sampler or arpeggiator.' }, version: '1.2.0', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 360 },
   i18n: { nl: { ports: { notes: 'Noten' } } },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [{ id: 'notes', name: 'Notes' }], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const T = TXT[host && host.lang] || TXT.en; let state = defaults(), dead = false, sh = null, wrap = null, sustain = false, deferred = [], bendV = 0.5, modV = 0;
-    const pressed = new Map(), buttons = new Map(), self = {};
+    const pressed = new Map(), buttons = new Map(), self = {}; let hint = null;
+    REG.all.push(self);
+    const holder = () => (REG.all.includes(REG.active) ? REG.active : REG.all[0]), mine = () => holder() === self;
     const emit = ev => { if (dead) return; if (ev.ch === undefined) ev.ch = state.channel; host.emit(self, 'notes', ev); };
     const cc = (id, value) => emit({ type: 'cc', id, value: clamp(value, 0, 1), time: ctx.currentTime });
     const mark = (note, on) => { const b = buttons.get(note); if (b) b.classList.toggle('on', on); };
@@ -83,12 +88,15 @@ export default {
       wh(T.bend, 0.5, true, v => { bendV = v; cc('bend', v); }); wh(T.mod, modV, false, v => { modV = v; cc('vibrato', v); });
       const sb = el('button', T.sustain, r3); sb.type = 'button'; sb.classList.toggle('on', sustain); sb.onclick = () => { pedal(!sustain); sb.style.outline = sustain ? '2px solid var(--sel)' : ''; };
       const pb = el('button', T.panic, r3); pb.type = 'button'; pb.onclick = panic;
-      const cl = el('label', null, r3); const ck = el('input', null, cl); ck.type = 'checkbox'; ck.checked = state.computer; ck.onchange = () => { state.computer = ck.checked; }; el('span', T.computerOn + ' · ' + T.computerHint, cl);
+      const cl = el('label', null, r3); const ck = el('input', null, cl); ck.type = 'checkbox'; ck.checked = state.computer; ck.onchange = () => { state.computer = ck.checked; }; el('span', T.computerOn + ' · ' + T.computerHint, cl); hint = el('div', null, m); hint.style.cssText = 'font-size:10px;color:var(--muted)'; showKeys();
     }
     // computertoetsen: alleen als de focus niet in een veld staat; Z en X verschuiven het octaaf
     const base = () => 60 + 12 * state.oct - state.transpose;
     const typing = e => { const t = e.composedPath && e.composedPath()[0] || e.target; return !!t && (['INPUT', 'SELECT', 'TEXTAREA'].includes(t.tagName) && t.type !== 'range' && t.type !== 'checkbox' || t.isContentEditable); };
-    const onKey = (e, isDown) => { if (dead || !state.computer || e.ctrlKey || e.metaKey || e.altKey || typing(e)) return;
+    const showKeys = () => { if (hint) { hint.textContent = mine() ? T.keysMine : T.keysOther; hint.style.opacity = mine() ? '1' : '0.6'; } };
+    const loseKeys = () => { for (const k of [...pressed.keys()]) if (String(k)[0] === 'k') { const [, n] = String(k).split(':'); up(k, +n); } showKeys(); };
+    function claim() { const prev = holder(); REG.active = self; if (prev !== self) { if (prev && prev._loseKeys) prev._loseKeys(); REG.all.forEach(k => k._showKeys && k._showKeys()); } }
+    const onKey = (e, isDown) => { if (dead || !state.computer || !mine() || e.ctrlKey || e.metaKey || e.altKey || typing(e)) return;
       if (isDown && !e.repeat && (e.code === 'KeyZ' || e.code === 'KeyX')) { state.oct = clamp(state.oct + (e.code === 'KeyX' ? 1 : -1), -3, 3); return; }
       const i = KEYMAP.indexOf(e.code); if (i < 0) return; e.preventDefault(); const n = base() + i, src = 'k' + e.code + ':' + n; if (isDown) { if (!e.repeat) { down(src, n); mark(n, true); } } else { up(src, n); mark(n, false); } };
     const kd = e => onKey(e, true), ku = e => onKey(e, false);
@@ -96,13 +104,14 @@ export default {
     document.addEventListener('keydown', kd); document.addEventListener('keyup', ku); if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') window.addEventListener('blur', blur);
     Object.assign(self, {
       inputs: {}, outputs: {},
-      mount(parent) { sh = parent.attachShadow ? (parent.shadowRoot || parent.attachShadow({ mode: 'open' })) : parent; render(); },
-      unmount() { if (sh) sh.innerHTML = ''; sh = null; buttons.clear(); },
+      mount(parent) { if (parent && parent.addEventListener) { parent.addEventListener('pointerdown', claim, true); parent.addEventListener('focusin', claim); } sh = parent.attachShadow ? (parent.shadowRoot || parent.attachShadow({ mode: 'open' })) : parent; render(); },
+      unmount() { if (sh) sh.innerHTML = ''; sh = null; hint = null; buttons.clear(); },
+      _claimKeys: claim, _loseKeys: loseKeys, _showKeys: showKeys,
       getState() { return { ...state }; },
       setState(s) { panic(); state = normalize(s); if (sh) render(); },
       getPreset() { const { keys, start, velocity, mode, duration, transpose, channel } = state; return { keys, start, velocity, mode, duration, transpose, channel }; },
       setPreset(p) { p = p && typeof p === 'object' ? p : {}; panic(); state = normalize({ ...state, ...p }); if (sh) render(); },
-      destroy() { dead = true; document.removeEventListener('keydown', kd); document.removeEventListener('keyup', ku); if (typeof window !== 'undefined' && typeof window.removeEventListener === 'function') window.removeEventListener('blur', blur); },
+      destroy() { dead = true; const was = holder() === self; REG.all.splice(REG.all.indexOf(self), 1); if (REG.active === self) REG.active = null; if (was) REG.all.forEach(k => k._showKeys && k._showKeys()); document.removeEventListener('keydown', kd); document.removeEventListener('keyup', ku); if (typeof window !== 'undefined' && typeof window.removeEventListener === 'function') window.removeEventListener('blur', blur); },
     });
     return self;
   },

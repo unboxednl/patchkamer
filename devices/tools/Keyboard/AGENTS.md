@@ -20,6 +20,7 @@ Een klavier zonder eigen geluid dat noten en controllers naar andere apparaten s
 - **Gebeurtenissen.** `note` (met `dur`, in vasthoudmodus ook `held: true`), `noteoff`, `allnotesoff` en `cc` met `id` `bend` of `vibrato` (0 … 1). Elke gebeurtenis draagt `ch` (het MIDI-kanaal).
 - **Speelmodus.** `hold` (standaard): noot aan bij indrukken, `noteoff` bij loslaten (met sustain pas bij loslaten van het pedaal). `pulse`: een noot met lengte `duration`.
 - **Computertoetsen.** A W S E D F T G Y H U J K O L P ; ' (18 toetsen vanaf C van het gekozen octaaf); Z en X verschuiven het octaaf. Werkt niet als de focus in een invoerveld staat.
+- **Meerdere Keyboards.** Alle Keyboards op de pagina delen één set computertoetsen (`globalThis.__pkKeyboardKeys`). Alleen de houder speelt mee: het Keyboard waar je het laatst op klikte of de focus had, zonder klik het oudste. Raakt een Keyboard de toetsen kwijt, dan laat het zijn computertoets-noten los; verdwijnt de houder, dan neemt het oudste over. Het paneel zegt of dit Keyboard de computertoetsen heeft. Test: `node docs/tools/test-keyboard-unique.mjs`.
 - **Toetsen.** `start` (laagste toets, een veelvoud van 12) en `keys` bepalen het bereik; de aanslag hangt af van waar je op de toets drukt (lager is harder). Een verloren focus van het venster laat alle noten los.
 
 ## De state

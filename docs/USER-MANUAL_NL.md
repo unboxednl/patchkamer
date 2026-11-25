@@ -68,6 +68,7 @@ Het icoon (een patchkabel tussen twee aansluitingen) verschijnt ook als tabbladi
 |---|---|
 | **Start** | Start en stopt de klok. Apparaten met een sequencer spelen mee. |
 | **BPM**, **Swing** | Tempo (40–200) en swing van de klok. |
+| **Volume** | Verschijnt alleen als er een **Speakers** op het canvas staat: het volume van de luidsprekers. Bij meer dan één Speakers toont het het hoogste volume en zet het ze allemaal mee, in dezelfde verhouding. |
 | **Bibliotheek** | Toont of verbergt het bibliotheekvenster met de tabs **Apparaten**, **Tunes**, **Presets**, **Samples**, **Songs** en **Skins** ([de tabs van de bibliotheek](#de-tabs-van-de-bibliotheek)). |
 | De naam bovenaan | De naam van je werkruimte. Klik erop om hem te wijzigen. |
 | **☰** | Het menu met al het andere, in vier groepen (de vier rijen hieronder). Het menu sluit na een keuze. |

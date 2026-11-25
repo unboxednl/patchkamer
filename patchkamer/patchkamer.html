@@ -46,6 +46,7 @@
     <button class="reclamp" id="recLamp" type="button" hidden><i aria-hidden="true"></i><span class="t">00:00</span></button>
     <span class="tp tpbpm"><span data-i18n="ui.bpm">BPM</span> <input type="number" id="bpm" min="40" max="200" value="126"></span>
     <span class="tp"><span data-i18n="ui.swing">Swing</span> <input type="range" id="swing" min="0" max="0.5" step="0.01" value="0.08" style="width:80px"></span>
+    <span class="tp" id="masterTp" hidden><span data-i18n="ui.master_volume">Volume</span> <input type="range" id="masterVol" min="0" max="1" step="0.01" value="0.8" style="width:80px" title="volume van de luidsprekers" aria-label="volume van de luidsprekers" data-i18n-title="attr.master_volume" data-i18n-aria="attr.master_volume"></span>
     <button class="small on" id="libToggle" title="bibliotheek tonen of verbergen (Alt+B)" data-i18n-title="attr.bibliotheek_tonen_of_verbergen_b" data-i18n="ui.bibliotheek">Bibliotheek</button>
   </div>
   <button class="small" id="menuBtn" aria-expanded="false" aria-controls="hdrMenu" title="menu" aria-label="menu" data-i18n-title="attr.t_menu" data-i18n-aria="attr.t_menu">☰</button>
@@ -317,6 +318,7 @@
 <script src="js/rec-lamp.js"></script>
 <script src="js/latency.js"></script>
 <script src="js/load-meter.js"></script>
+<script src="js/master-volume.js"></script>
 <script src="js/canvas-sections.js"></script>
 <script src="js/startup.js"></script>
 <script src="js/skins-design.js"></script>

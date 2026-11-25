@@ -4,6 +4,14 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.50.0 (2026-11-25)
+
+### Toegevoegd
+- **Master volume in de bovenste balk.** Staat er een Speakers op het canvas, dan verschijnt naast Swing een schuif *Volume*. Hij toont en zet het volume van de Speakers (bij meer dan één Speakers: het hoogste, en slepen zet ze allemaal mee in dezelfde verhouding). De regelaar op de kaart van Speakers en de schuif lopen gelijk. Zonder Speakers is de schuif verborgen.
+
+### Opgelost
+- **Keyboard 1.2.0: meerdere Keyboards op één canvas spelen niet meer samen.** De computertoetsen (en Z/X voor het octaaf) kwamen bij elk Keyboard aan, waardoor een tweede Keyboard zijn eigen apparaten meespeelde. Nu heeft maar één Keyboard de computertoetsen: dat waar je het laatst op klikte (zonder klik: het eerste). Een Keyboard dat de toetsen kwijtraakt laat zijn noten los, en het paneel zegt of het ze heeft. Geluid, state, presets en poorten zijn ongewijzigd. Niet met echte handen geprobeerd: getest met een script dat de toetsen indrukt op twee en vier Keyboards.
+
 ## 0.49.4 (2026-11-23)
 
 ### Opgelost

@@ -68,6 +68,7 @@ The icon (a patch cable between two jacks) also shows as the tab icon in the bro
 |---|---|
 | **Start** | Starts and stops the clock. Devices with a sequencer play along. |
 | **BPM**, **Swing** | Tempo (40–200) and swing of the clock. |
+| **Volume** | Only appears when a **Speakers** is on the canvas: the volume of the speakers. With more than one Speakers it shows the highest volume and moves them all together, keeping their ratio. |
 | **Library** | Shows or hides the library window with the tabs **Devices**, **Tunes**, **Presets**, **Samples**, **Songs** and **Skins** ([the library tabs](#the-library-tabs)). |
 | The name at the top | The name of your workspace. Click it to rename. |
 | **☰** | The menu with everything else, in four groups (the four rows below). The menu closes after a choice. |
